@@ -1,5 +1,3 @@
 # MC426 - Engenharia de Software
 
-Gabriel cara de papel
-
-Guilherme cara de paquiderme
+Esse projeto terá como tema saúde pública.
