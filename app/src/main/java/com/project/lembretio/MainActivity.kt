@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Faala galera testando o botão aqui :)", Snackbar.LENGTH_LONG)
+            Snackbar.make(view, "Adicionar funcionalidades", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
     }
