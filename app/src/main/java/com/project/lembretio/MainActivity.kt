@@ -23,8 +23,8 @@ class MainActivity : AppCompatActivity() {
         binding.rvEventActivity.layoutManager = LinearLayoutManager(applicationContext)
         if (EventApplication.adapter  == null) {
             EventApplication.adapter = EventAdapter(mutableListOf(
-                Event("testes", false),
-                Event("testes2", false)))
+                Event("event 1", false),
+                Event("event 2", false)))
         }
 
         binding.rvEventActivity.adapter = EventApplication.adapter

@@ -8,7 +8,9 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 
 
 class EventActivity : AppCompatActivity() {
@@ -21,6 +23,15 @@ class EventActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event)
+
+        // add toolbar with back button
+        val toolbar = findViewById<Toolbar>(R.id.tbEvent)
+        setSupportActionBar(toolbar)
+        val actionBar: ActionBar? = supportActionBar
+        actionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar.setNavigationOnClickListener {
+            startActivity(Intent(applicationContext, MainActivity::class.java))
+        }
 
         mainText = findViewById(R.id.rvEventActivityTitle)
         editText = findViewById(R.id.etEventTitle)
