@@ -5,12 +5,14 @@ import android.os.Build
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 
 
 class EventActivity : AppCompatActivity() {
+    private lateinit var mainText: TextView
     private lateinit var editText: EditText
     private lateinit var submitButton: Button
     private lateinit var cancelButton: Button
@@ -20,6 +22,7 @@ class EventActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event)
 
+        mainText = findViewById(R.id.rvEventActivityTitle)
         editText = findViewById(R.id.etEventTitle)
         submitButton = findViewById(R.id.btnSubmit)
         cancelButton = findViewById(R.id.btnCancel)
@@ -29,6 +32,7 @@ class EventActivity : AppCompatActivity() {
 
         if (initialTitle != null) {
             editText.setText(initialTitle)
+            mainText.text = "Edit Event Here..."
         }
 
         submitButton.setOnClickListener {

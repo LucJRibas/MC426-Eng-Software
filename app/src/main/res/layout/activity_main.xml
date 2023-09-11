@@ -7,11 +7,24 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        app:title="Lembretio"
+        app:titleTextColor="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvEventActivity"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="664dp"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginTop="3dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnCreateEvent"
