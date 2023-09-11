@@ -13,12 +13,14 @@
         android:background="@color/white"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvEventTitle"
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/btnEvent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="start|center_vertical"
             android:text="Title"
-            android:textSize="20dp"
+            android:background="@color/white"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
 
