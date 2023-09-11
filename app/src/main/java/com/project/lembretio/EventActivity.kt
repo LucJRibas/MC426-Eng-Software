@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 class EventActivity : AppCompatActivity() {
     private lateinit var editText: EditText
     private lateinit var submitButton: Button
+    private lateinit var cancelButton: Button
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,6 +22,7 @@ class EventActivity : AppCompatActivity() {
 
         editText = findViewById(R.id.etEventTitle)
         submitButton = findViewById(R.id.btnSubmit)
+        cancelButton = findViewById(R.id.btnCancel)
 
         submitButton.setOnClickListener {
             val intentBack = Intent(applicationContext, MainActivity::class.java)
@@ -31,6 +33,10 @@ class EventActivity : AppCompatActivity() {
             }
 
             startActivity(intentBack)
+        }
+
+        cancelButton.setOnClickListener {
+            startActivity(Intent(applicationContext, MainActivity::class.java))
         }
 
 
