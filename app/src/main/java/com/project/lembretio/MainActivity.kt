@@ -18,7 +18,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-    private lateinit var eventAdapter: EventAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,21 +27,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.rvEventActivity.layoutManager = LinearLayoutManager(applicationContext)
-        eventAdapter = EventAdapter(mutableListOf(
-            Event("testes", false),
-            Event("testes2", false)))
-        binding.rvEventActivity.adapter = eventAdapter
+        if (EventApplication.adapter  == null) {
+            EventApplication.adapter = EventAdapter(mutableListOf(
+                Event("testes", false),
+                Event("testes2", false)))
+        }
+
+        binding.rvEventActivity.adapter = EventApplication.adapter
 
         binding.btnCreateEvent.setOnClickListener {
             val intent = Intent(applicationContext, EventActivity::class.java)
             startActivity(intent)
-        }
-
-        val eventTitle = intent?.getStringExtra("event")
-
-        eventTitle?.let {
-
-            eventAdapter.addEvent(Event(it, false))
         }
 
     }

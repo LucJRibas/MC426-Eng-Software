@@ -24,11 +24,10 @@ class EventActivity : AppCompatActivity() {
 
         submitButton.setOnClickListener {
             val intentBack = Intent(applicationContext, MainActivity::class.java)
-            intentBack.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
             val title = editText.text.toString()
             if (title.isNotEmpty()){
-                intentBack.putExtra("event", title)
+                EventApplication.adapter?.addEvent(Event(title, false))
             }
 
             startActivity(intentBack)
