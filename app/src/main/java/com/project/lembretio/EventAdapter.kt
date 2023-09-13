@@ -12,8 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 class EventAdapter(
     private val events: MutableList<Event> = mutableListOf()
 ) : RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
-
     class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
+    operator fun get(i: Int): Event { return events[i] }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         return EventViewHolder(
