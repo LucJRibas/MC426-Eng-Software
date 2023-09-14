@@ -46,6 +46,15 @@
                     android:textSize="30dp"
                     android:textStyle="bold"
                     android:layout_margin="10dp"/>
+
+                <Button
+                    android:id="@+id/btnSaveDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_weight="0.7"
+                    android:text="Set Date" />
+
                 <EditText
                     android:id="@+id/etEventTitle"
                     android:layout_width="match_parent"
