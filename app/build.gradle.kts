@@ -39,10 +39,11 @@ android {
 }
 
 dependencies {
-    val room_version = "2.5.2"
+    implementation("androidx.test:monitor:1.6.1")
+    val roomVersion = "2.5.2"
 
-    implementation("androidx.room:room-runtime:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-runtime:$roomVersion")
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
 
     // To use Kotlin annotation processing tool (kapt)
     //kapt("androidx.room:room-compiler:$room_version")
