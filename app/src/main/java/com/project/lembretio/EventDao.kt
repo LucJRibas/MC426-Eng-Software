@@ -9,17 +9,17 @@ import androidx.room.Update
 @Dao
 interface EventDao {
     @Insert
-    suspend fun insert(event: Event)
+    fun insert(event: Event)
 
     @Update
-    suspend fun update(event: Event)
+    fun update(event: Event)
 
     @Delete
-    suspend fun delete(event: Event)
+    fun delete(event: Event)
 
     @Query("SELECT * FROM event_table")
-    suspend fun getAllEvents(): List<Event>
+    fun getAllEvents(): List<Event>
 
     @Query("SELECT * FROM event_table WHERE id = :eventId")
-    suspend fun getEventById(eventId: Long): Event?
+    fun getEventById(eventId: Long): Event?
 }
