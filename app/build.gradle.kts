@@ -18,6 +18,12 @@ android {
     }
 
     buildTypes {
+        buildTypes {
+            create("customDebugType") {
+                isDebuggable = true
+            }
+        }
+
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -40,6 +46,7 @@ android {
 
 dependencies {
     implementation("androidx.test:monitor:1.6.1")
+    implementation("androidx.room:room-common:2.5.2")
     val roomVersion = "2.5.2"
 
     implementation("androidx.room:room-runtime:$roomVersion")

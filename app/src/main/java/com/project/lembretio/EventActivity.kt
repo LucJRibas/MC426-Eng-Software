@@ -2,6 +2,7 @@ package com.project.lembretio
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -38,6 +39,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     var savedMinute = 0
 
 
+    private val appDatabase by lazy { AppDatabase.getDatabase(this).EventDao() }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,6 +84,12 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
                 Toast.makeText(applicationContext, "Please Enter A Title For Your Event", Toast.LENGTH_SHORT).show()   //shows the toast if input field is empty
             }
 
+            /*insertDataToDatabase(title)
+
+             */
+
+
+
         }
 
         cancelButton.setOnClickListener {
@@ -122,5 +130,13 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
         savedHour = hourOfDay
         savedMinute = minute
+    }
+
+    private fun insertDataToDatabase(title : String){
+        val createdEvent = Event(title,true)
+        appDatabase.insert(createdEvent)
+        Toast.makeText(applicationContext, "Successfully Added!", Toast.LENGTH_SHORT).show()
+
+
     }
 }
