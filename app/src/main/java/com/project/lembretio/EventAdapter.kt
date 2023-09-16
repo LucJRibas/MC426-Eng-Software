@@ -37,16 +37,24 @@ class EventAdapter(
 
     }
 
+    fun changeEventData(idx: Int, newDate: String) {
+        events[idx].name = newDate
+        notifyItemChanged(idx)
+    }
+
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = events[position]
         holder.itemView.apply {
             val button = findViewById<TextView>(R.id.btnEvent)
+            val dateText = findViewById<TextView>(R.id.textDate)
             button.text = event.name
+            dateText.text = event.date
             button.setOnClickListener {
                 val intent = Intent(it.context, EventActivity::class.java)
 
                 intent.putExtra("title", event.name)
                 intent.putExtra("idx", position)
+                intent.putExtra("data", event.date)
 
                 startActivity(it.context, intent, null)            }
         }

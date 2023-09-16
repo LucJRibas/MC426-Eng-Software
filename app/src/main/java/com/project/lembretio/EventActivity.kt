@@ -72,6 +72,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
 
         val initialTitle = intent.getStringExtra("title")
         val eventIdx = intent.getIntExtra("idx", -1)
+        val initialDate = intent.getStringExtra("date")
 
         if (initialTitle != null) {
             editText.setText(initialTitle)
