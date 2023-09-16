@@ -1,8 +1,15 @@
 package com.project.lembretio
 
+
+import android.Manifest
 import android.app.DatePickerDialog
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.widget.Button
@@ -15,11 +22,15 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import java.util.Calendar
 
 
 class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     private lateinit var mainText: TextView
+    private lateinit var notifyButton: Button
     private lateinit var editText: EditText
     private lateinit var submitButton: Button
     private lateinit var cancelButton: Button
@@ -57,6 +68,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         editText = findViewById(R.id.etEventTitle)
         submitButton = findViewById(R.id.btnSubmit)
         cancelButton = findViewById(R.id.btnCancel)
+        notifyButton = findViewById(R.id.btnNotify)
 
         val initialTitle = intent.getStringExtra("title")
         val eventIdx = intent.getIntExtra("idx", -1)
@@ -90,6 +102,35 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
 
         pickDate()
 
+        notifyButton.setOnClickListener {
+
+
+            var builder = NotificationCompat.Builder(this, "CHANNEL_ID")
+                .setContentTitle("Lembretio")
+                .setContentText("muhahahahahah")
+                .setSmallIcon(R.drawable.ic_notification)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+            var notificationManagerCompat = NotificationManagerCompat.from(this)
+            notificationManagerCompat.notify(1, builder.build())
+        }
+    }
+
+    private fun createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name: CharSequence = "MyNotification"
+            val descriptionText = "kkkkkkkkk"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel("idchannel", name, importance).apply {
+                description = descriptionText
+            }
+            // Register the channel with the system
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
     }
 
     private fun getTimeCalendar() {
@@ -102,11 +143,11 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     }
 
     private fun pickDate() {
+        getTimeCalendar()
         setDateButton = findViewById(R.id.btnSaveDate)
         setDateButton.setOnClickListener {
-            DatePickerDialog(this, this, year, month, day).show()
+            DatePickerDialog(this,this, year, month, day).show()
         }
-
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
