@@ -97,7 +97,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
                 val intentBack = Intent(applicationContext, MainActivity::class.java)
 
                 when(initialTitle) {
-                    null -> EventApplication.adapter?.addEvent(Event(title, false))
+                    null -> EventApplication.adapter?.addEvent(Event(title, false, date=date))
                     else -> {
                         EventApplication.adapter?.changeEventTitle(eventIdx, title)
                         EventApplication.adapter?.changeEventDate(eventIdx, date)
