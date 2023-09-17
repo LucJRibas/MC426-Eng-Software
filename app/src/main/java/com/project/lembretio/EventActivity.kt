@@ -2,7 +2,6 @@ package com.project.lembretio
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -12,19 +11,25 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.TimePicker
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProvider
 import java.util.Calendar
 
 
 class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+    private val eventViewModel: EventViewModel by viewModels {
+        EventModelFactory((application as EventApplication).repository)
+    }
     private lateinit var mainText: TextView
     private lateinit var editText: EditText
     private lateinit var submitButton: Button
     private lateinit var cancelButton: Button
     private lateinit var setDateButton: Button
+
 
     var day = 0
     var month = 0
@@ -38,14 +43,10 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     var savedHour = 0
     var savedMinute = 0
 
-
-    private val appDatabase by lazy { AppDatabase.getDatabase(this).EventDao() }
-
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event)
-
         // add toolbar with back button
         val toolbar = findViewById<Toolbar>(R.id.tbEvent)
         setSupportActionBar(toolbar)
@@ -75,7 +76,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
                 val intentBack = Intent(applicationContext, MainActivity::class.java)
 
                 when(initialTitle) {
-                    null -> EventApplication.adapter?.addEvent(Event(title, false))
+                    null -> insertDataToDatabase(title)
                     else -> EventApplication.adapter?.changeEventTitle(eventIdx, title)
                 }
 
@@ -83,12 +84,6 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
             } else {
                 Toast.makeText(applicationContext, "Please Enter A Title For Your Event", Toast.LENGTH_SHORT).show()   //shows the toast if input field is empty
             }
-
-            /*insertDataToDatabase(title)
-
-             */
-
-
 
         }
 
@@ -134,9 +129,13 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
 
     private fun insertDataToDatabase(title : String){
         val createdEvent = Event(title,true)
-        appDatabase.insert(createdEvent)
+        eventViewModel.addEvent(createdEvent)
         Toast.makeText(applicationContext, "Successfully Added!", Toast.LENGTH_SHORT).show()
+    }
 
-
+    private fun updateDatabaseEvent(title : String){
+        val createdEvent = Event(title,true)
+        eventViewModel.updateEvent(createdEvent)
+        Toast.makeText(applicationContext, "Successfully Added!", Toast.LENGTH_SHORT).show()
     }
 }

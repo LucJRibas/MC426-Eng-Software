@@ -4,15 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room
 import com.project.lembretio.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-
+    private val eventViewModel: EventViewModel by viewModels {
+        EventModelFactory((application as EventApplication).repository)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,14 +22,21 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.rvEventActivity.layoutManager = LinearLayoutManager(applicationContext)
-        if (EventApplication.adapter  == null) {
-            EventApplication.adapter = EventAdapter(mutableListOf(
-                Event("event 1", false),
-                Event("event 2", false)))
+        eventViewModel.events.observe(this){
+            binding.rvEventActivity.apply {
+                layoutManager = LinearLayoutManager(applicationContext)
+                binding.rvEventActivity.adapter = EventAdapter(it.toMutableList())
+            }
         }
 
-        binding.rvEventActivity.adapter = EventApplication.adapter
+//        binding.rvEventActivity.layoutManager = LinearLayoutManager(applicationContext)
+//        if (EventApplication.adapter  == null) {
+//            eventViewModel.addEvent(Event("event 1", false))
+//            eventViewModel.addEvent(Event("event 2", false))
+//            EventApplication.adapter = eventViewModel.events.value?.let { EventAdapter(it.toMutableList()) }
+//        }
+//
+//        binding.rvEventActivity.adapter = EventApplication.adapter
 
         binding.btnCreateEvent.setOnClickListener {
             val intent = Intent(applicationContext, EventActivity::class.java)

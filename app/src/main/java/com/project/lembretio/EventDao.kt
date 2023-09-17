@@ -3,23 +3,28 @@ package com.project.lembretio
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface EventDao {
-    @Insert
-    fun insert(event: Event)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(event: Event)
 
     @Update
-    fun update(event: Event)
+    suspend fun update(event: Event)
 
     @Delete
-    fun delete(event: Event)
+    suspend fun delete(event: Event)
 
-    @Query("SELECT * FROM event_table")
-    fun getAllEvents(): List<Event>
+    @Query("SELECT * FROM event_table ORDER BY id ASC")
+    fun getAllEvents(): Flow<List<Event>>
 
-    @Query("SELECT * FROM event_table WHERE id = :eventId")
-    fun getEventById(eventId: Long): Event?
+    @Query("DELETE FROM event_table")
+    fun deleteAll()
+
+//    @Query("SELECT * FROM event_table WHERE id = :eventId")
+//    fun getEventById(eventId: Long): Event?
 }

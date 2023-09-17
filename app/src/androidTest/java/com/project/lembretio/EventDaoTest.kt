@@ -24,7 +24,7 @@ class EventDaoTest {
         Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java)
             .allowMainThreadQueries()
             .build().also { db = it }
-        eventDao = db.EventDao()
+        eventDao = db.eventDao()
     }
 
 
