@@ -4,7 +4,9 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 
@@ -26,17 +28,20 @@ class EventAdapter(
             )
         )
     }
-
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = events[position]
         holder.itemView.apply {
-            val button = findViewById<TextView>(R.id.btnEvent)
-            button.text = event.name
+            val button = findViewById<LinearLayout>(R.id.llEventInfo)
+            val titleText = findViewById<TextView>(R.id.textTitle)
+            val dateText = findViewById<TextView>(R.id.textDate)
+            titleText.text = event.name
+            dateText.text = event.date
             button.setOnClickListener {
                 val intent = Intent(it.context, EventActivity::class.java)
 
                 intent.putExtra("title", event.name)
-                intent.putExtra("idx", event.id)
+                intent.putExtra("event_id", event.id)
+                intent.putExtra("date", event.date)
 
                 startActivity(it.context, intent, null)
             }

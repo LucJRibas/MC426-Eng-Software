@@ -1,6 +1,10 @@
 package com.project.lembretio
 
+import android.Manifest
+import android.app.Notification
+import android.app.NotificationManager
 import android.content.Context
+import android.os.Build
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.core.app.launchActivity
@@ -9,10 +13,13 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.rule.GrantPermissionRule
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import org.awaitility.kotlin.await
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -38,6 +45,21 @@ class ExampleInstrumentedTest {
         eventDao = db.eventDao()
     }
 
+    lateinit var instrumentationContext: Context
+
+    @get:Rule
+    public val mRuntimePermissionRule: GrantPermissionRule =
+        if (Build.VERSION.SDK_INT >= 33) {
+            GrantPermissionRule.grant(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
+
+    @Before
+    fun setup() {
+        instrumentationContext = InstrumentationRegistry.getInstrumentation().targetContext
+    }
+
     @Test
     fun useAppContext() {
         // Context of the app under test.
@@ -56,6 +78,26 @@ class ExampleInstrumentedTest {
             }
 
             assertEquals("should not add item if canceled",1, eventDao.getAllEvents().first().size)
+        }
+    }
+
+    @Test
+    fun notifyButtonTest() {
+        runBlocking {
+            val event = Event(name = "Test", repeating = false)
+            eventDao.insert(event)
+            launchActivity<EventActivity>().use {
+                onView(withId(R.id.btnNotify)).perform(click())
+
+                val manager: NotificationManager =
+                    instrumentationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                await.until { manager.activeNotifications.isNotEmpty() }
+
+                with(manager.activeNotifications.first()) {
+                    assertEquals(id, this.id)
+                    assertEquals("Lembretio", this.notification.extras[Notification.EXTRA_TITLE])
+                }
+            }
         }
     }
 

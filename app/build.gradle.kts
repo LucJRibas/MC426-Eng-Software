@@ -40,11 +40,12 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-
     buildFeatures {
         viewBinding = true
     }
 }
+
+val core_version = "1.6.0"
 
 dependencies {
     implementation("androidx.test:monitor:1.6.1")
@@ -82,6 +83,9 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("androidx.test:core-ktx:1.5.0")
     implementation("com.google.android.material:material:1.9.0")
+    implementation("androidx.core:core-ktx:$core_version")
+    androidTestImplementation("org.awaitility:awaitility-kotlin:3.1.6")
+    androidTestImplementation("androidx.test:rules:1.4.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.2.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
     androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.2")

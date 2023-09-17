@@ -8,9 +8,6 @@ import androidx.room.PrimaryKey
 data class Event(
     @ColumnInfo(name = "name") var name: String,
     @ColumnInfo(name = "repeating") val repeating: Boolean,
+    @ColumnInfo(name = "date") var date: String = "",
     @PrimaryKey(autoGenerate = true) val id: Int = 0
-
-    /*val uid: Int = 0 // Defina um valor padrão de 0 para que o Room saiba que é auto-gerado
-
-     */
 )
