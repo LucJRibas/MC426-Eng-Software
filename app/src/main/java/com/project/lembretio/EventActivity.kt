@@ -125,7 +125,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     private fun showNotification(){
         createNotificationChannel()
 
-        var date = Date() 
+        var date = Date()
         //val notificationId = SimpleDateFormat("ddHHmmss", Locale.US).format(date).toInt()
 
         var builder = NotificationCompat.Builder(this, "$CHANNEL_ID")
