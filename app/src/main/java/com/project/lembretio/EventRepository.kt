@@ -17,4 +17,10 @@ class EventRepository(private val eventDao: EventDao)
     {
         eventDao.update(event)
     }
+
+    @WorkerThread
+    suspend fun deleteEvent(event: Event)
+    {
+        eventDao.delete(event)
+    }
 }

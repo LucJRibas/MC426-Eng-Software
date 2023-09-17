@@ -19,6 +19,10 @@ class EventViewModel(private val repository: EventRepository): ViewModel()
         repository.updateEvent(event)
     }
 
+    fun deleteEvent(event: Event) = viewModelScope.launch {
+        repository.deleteEvent(event)
+    }
+
 }
 
 class EventModelFactory(private val repository: EventRepository) : ViewModelProvider.Factory

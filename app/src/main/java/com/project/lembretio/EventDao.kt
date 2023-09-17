@@ -22,8 +22,6 @@ interface EventDao {
     @Query("SELECT * FROM event_table ORDER BY id ASC")
     fun getAllEvents(): Flow<List<Event>>
 
-    @Query("DELETE FROM event_table")
-    fun deleteAll()
 
 //    @Query("SELECT * FROM event_table WHERE id = :eventId")
 //    fun getEventById(eventId: Long): Event?

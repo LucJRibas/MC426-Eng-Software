@@ -62,7 +62,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         cancelButton = findViewById(R.id.btnCancel)
 
         val initialTitle = intent.getStringExtra("title")
-        val eventIdx = intent.getIntExtra("idx", -1)
+        val eventId = intent.getIntExtra("idx", -1)
 
         if (initialTitle != null) {
             editText.setText(initialTitle)
@@ -77,7 +77,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
 
                 when(initialTitle) {
                     null -> insertDataToDatabase(title)
-                    else -> EventApplication.adapter?.changeEventTitle(eventIdx, title)
+                    else -> updateDatabaseEvent(title, eventId)
                 }
 
                 startActivity(intentBack)
@@ -133,9 +133,9 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         Toast.makeText(applicationContext, "Successfully Added!", Toast.LENGTH_SHORT).show()
     }
 
-    private fun updateDatabaseEvent(title : String){
-        val createdEvent = Event(title,true)
-        eventViewModel.updateEvent(createdEvent)
-        Toast.makeText(applicationContext, "Successfully Added!", Toast.LENGTH_SHORT).show()
+    private fun updateDatabaseEvent(title : String, id: Int){
+        val updatedEvent = Event(title,true, id)
+        eventViewModel.updateEvent(updatedEvent)
+        Toast.makeText(applicationContext, "Successfully Updated!", Toast.LENGTH_SHORT).show()
     }
 }

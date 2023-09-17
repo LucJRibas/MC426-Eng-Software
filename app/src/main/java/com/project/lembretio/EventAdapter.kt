@@ -10,7 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 
 
 class EventAdapter(
-    private val events: MutableList<Event> = mutableListOf()
+    private val events: List<Event>,
+    private val eventViewModel: EventViewModel
 ) : RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
     class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
@@ -26,17 +27,6 @@ class EventAdapter(
         )
     }
 
-    fun addEvent(event: Event) {
-        events.add(event)
-        notifyItemInserted(events.size - 1)
-    }
-
-    fun changeEventTitle(idx: Int, newTitle: String) {
-        events[idx].name = newTitle
-        notifyItemChanged(idx)
-
-    }
-
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = events[position]
         holder.itemView.apply {
@@ -46,9 +36,15 @@ class EventAdapter(
                 val intent = Intent(it.context, EventActivity::class.java)
 
                 intent.putExtra("title", event.name)
-                intent.putExtra("idx", position)
+                intent.putExtra("idx", event.id)
 
-                startActivity(it.context, intent, null)            }
+                startActivity(it.context, intent, null)
+            }
+
+            val removeButton = findViewById<TextView>(R.id.btnRemove)
+            removeButton.setOnClickListener {
+                eventViewModel.deleteEvent(event)
+            }
         }
     }
 

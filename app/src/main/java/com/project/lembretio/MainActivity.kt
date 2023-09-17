@@ -25,18 +25,9 @@ class MainActivity : AppCompatActivity() {
         eventViewModel.events.observe(this){
             binding.rvEventActivity.apply {
                 layoutManager = LinearLayoutManager(applicationContext)
-                binding.rvEventActivity.adapter = EventAdapter(it.toMutableList())
+                binding.rvEventActivity.adapter = EventAdapter(it, eventViewModel)
             }
         }
-
-//        binding.rvEventActivity.layoutManager = LinearLayoutManager(applicationContext)
-//        if (EventApplication.adapter  == null) {
-//            eventViewModel.addEvent(Event("event 1", false))
-//            eventViewModel.addEvent(Event("event 2", false))
-//            EventApplication.adapter = eventViewModel.events.value?.let { EventAdapter(it.toMutableList()) }
-//        }
-//
-//        binding.rvEventActivity.adapter = EventApplication.adapter
 
         binding.btnCreateEvent.setOnClickListener {
             val intent = Intent(applicationContext, EventActivity::class.java)
