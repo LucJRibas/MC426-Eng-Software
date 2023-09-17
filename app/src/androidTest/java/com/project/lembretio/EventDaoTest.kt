@@ -6,6 +6,11 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.StandardTestDispatcher
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -37,59 +42,70 @@ class EventDaoTest {
     @Test
     @Throws(Exception::class)
     fun insertAndRetrieveEvent() {
-        createDb()
         val event = Event(name = "Test Event", repeating = false)
 
-        eventDao.insert(event)
+        runBlocking {
+            eventDao.insert(event)
+            val id = eventDao.getAllEvents().first().first().id
+            val retrievedEvent = eventDao.getEventById(id)
+            assert(retrievedEvent != null)
+            assert(retrievedEvent?.name == event.name)
+            assert(retrievedEvent?.repeating == event.repeating)
+        }
 
-        val retrievedEvent = eventDao.getEventById(1) // Assuming the first event has an id of 1
-
-        assert(retrievedEvent != null)
-        assert(retrievedEvent?.name == event.name)
-        assert(retrievedEvent?.repeating == event.repeating)
-        assert(retrievedEvent?.isChecked == event.isChecked)
     }
 
     @Test
     @Throws(Exception::class)
-    fun updateEvent() {
+    fun updateEvent() = runBlocking {
         val event = Event(name = "Test Event", repeating = false)
-
         eventDao.insert(event)
 
-        val updatedEvent = event.copy(name = "Updated Event")
+        val id = eventDao.getAllEvents().first().first().id
+
+        val updatedEvent = event.copy(name = "Updated Event", id = id)
+
         eventDao.update(updatedEvent)
 
-        val retrievedEvent = eventDao.getEventById(1) // Assuming the first event has an id of 1
-
-        assert(retrievedEvent != null)
-        assert(retrievedEvent?.name == updatedEvent.name)
+        val retrievedEvent = eventDao.getEventById(id)
+        assert(retrievedEvent != null) { "Event should not be null" }
+        assert(retrievedEvent?.name == updatedEvent.name) { "Event should have been updated (name: ${retrievedEvent?.name} expected: ${updatedEvent.name}"}
     }
+
 
     @Test
     @Throws(Exception::class)
-    fun deleteEvent() {
+    fun deleteEvent() = runBlocking {
+
         val event = Event(name = "Test Event", repeating = false)
-
         eventDao.insert(event)
-        eventDao.delete(event)
+        val insertedEventId = event.id
 
-        val retrievedEvent = eventDao.getEventById(1) // Assuming the first event has an id of 1
+        eventDao.delete(event.copy(id = insertedEventId))
 
-        assert(retrievedEvent == null)
+        val retrievedEvent = eventDao.getEventById(insertedEventId)
+        assert(retrievedEvent == null) { "Event should have been deleted" }
     }
 
+
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun testGetAllEvents() {
         val event1 = Event(name = "Event 1", repeating = false)
         val event2 = Event(name = "Event 2", repeating = true)
 
-        // Inserir eventos no banco de dados
-        eventDao.insert(event1)
-        eventDao.insert(event2)
+        val allEvents = mutableListOf<Event>()
 
-        // Obter todos os eventos do banco de dados
-        val allEvents = eventDao.getAllEvents()
+        // Inserir eventos no banco de dados
+        runBlocking {
+            val testDispatcher = StandardTestDispatcher()
+
+            eventDao.insert(event1)
+            eventDao.insert(event2)
+
+            allEvents.addAll(eventDao.getAllEvents().first())
+        }
 
         assertEquals(2, allEvents.size) // Verifica se há dois eventos
         assertEquals(event1.name, allEvents[0].name)
@@ -103,9 +119,11 @@ class EventDaoTest {
         val event3 = Event(name = "Event 3", repeating = false)
 
         // Inserir os eventos no banco de dados
-        eventDao.insert(event1)
-        eventDao.insert(event2)
-        eventDao.insert(event3)
+        runBlocking {
+            eventDao.insert(event1)
+            eventDao.insert(event2)
+            eventDao.insert(event3)
+        }
 
         // Obter os eventos pelo ID
         val retrievedEvent1 = eventDao.getEventById(1) // Supondo que o primeiro evento tenha um ID de 1

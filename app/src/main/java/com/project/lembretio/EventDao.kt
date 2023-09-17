@@ -23,6 +23,6 @@ interface EventDao {
     fun getAllEvents(): Flow<List<Event>>
 
 
-//    @Query("SELECT * FROM event_table WHERE id = :eventId")
-//    fun getEventById(eventId: Long): Event?
+    @Query("SELECT * FROM event_table WHERE id = :eventId")
+    fun getEventById(eventId: Int): Event?
 }
