@@ -3,7 +3,6 @@ package com.project.lembretio
 
 import android.Manifest
 import android.app.DatePickerDialog
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.TimePickerDialog
@@ -31,6 +30,7 @@ import java.util.Calendar
 class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     private lateinit var mainText: TextView
     private lateinit var notifyButton: Button
+    private lateinit var dateText: TextView
     private lateinit var editText: EditText
     private lateinit var submitButton: Button
     private lateinit var cancelButton: Button
@@ -65,6 +65,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         }
 
         mainText = findViewById(R.id.rvEventActivityTitle)
+        dateText = findViewById(R.id.textEventDate)
         editText = findViewById(R.id.etEventTitle)
         submitButton = findViewById(R.id.btnSubmit)
         cancelButton = findViewById(R.id.btnCancel)
@@ -79,15 +80,23 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
             mainText.text = "Edit Event Here..."
         }
 
+        if(initialDate != null) {
+            dateText.setText(initialDate)
+        }
+
         submitButton.setOnClickListener {
 
             val title = editText.text.toString()
+            var date = dateText.text.toString()
             if (title.isNotEmpty()){
                 val intentBack = Intent(applicationContext, MainActivity::class.java)
 
                 when(initialTitle) {
                     null -> EventApplication.adapter?.addEvent(Event(title, false))
-                    else -> EventApplication.adapter?.changeEventTitle(eventIdx, title)
+                    else -> {
+                        EventApplication.adapter?.changeEventTitle(eventIdx, title)
+                        EventApplication.adapter?.changeEventDate(eventIdx, date)
+                    }
                 }
 
                 startActivity(intentBack)
@@ -104,8 +113,6 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         pickDate()
 
         notifyButton.setOnClickListener {
-
-
             var builder = NotificationCompat.Builder(this, "CHANNEL_ID")
                 .setContentTitle("Lembretio")
                 .setContentText("muhahahahahah")
@@ -113,6 +120,14 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
             var notificationManagerCompat = NotificationManagerCompat.from(this)
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 122);
+            }
+
             notificationManagerCompat.notify(1, builder.build())
         }
     }
@@ -155,14 +170,13 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         savedDay = dayOfMonth
         savedMonth = month
         savedYear = year
-
-        getTimeCalendar()
-
+        dateText.setText(dayOfMonth.toString() + "-" + (month + 1) + "-" + year)
         TimePickerDialog(this,this,hour,minute,true).show()
     }
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
         savedHour = hourOfDay
         savedMinute = minute
+        dateText.setText(dateText.text.toString() + " " +  hourOfDay + ':' + minute)
     }
 }

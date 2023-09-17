@@ -1,5 +1,8 @@
 package com.project.lembretio
 
+import android.app.Notification
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.widget.EditText
 import androidx.test.core.app.launchActivity
@@ -23,6 +26,7 @@ import org.junit.Assert.*
 class ExampleInstrumentedTest {
 
     private val adapter = EventAdapter()
+
     @Test
     fun useAppContext() {
         // Context of the app under test.

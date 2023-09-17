@@ -2,6 +2,15 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
 }
+configurations {
+    all {
+        resolutionStrategy {
+            // do not upgrade above 3.12.0 to support API < 21 while server uses
+            // COMPATIBLE_TLS, or okhttp3 is used in project
+            force("org.hamcrest:hamcrest:2.1")
+        }
+    }
+}
 
 android {
     namespace = "com.project.lembretio"
@@ -54,4 +63,5 @@ dependencies {
     androidTestImplementation("androidx.test:core-ktx:1.5.0")
     implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.core:core-ktx:$core_version")
+    androidTestImplementation("org.awaitility:awaitility-kotlin:3.1.6")
 }

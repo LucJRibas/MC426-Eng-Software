@@ -4,5 +4,5 @@ data class Event(
     var name: String,
     val repeating: Boolean,
     var isChecked: Boolean = false,
-    var date: String = "aaa"
+    var date: String = ""
 )
