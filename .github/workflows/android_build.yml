@@ -4,17 +4,29 @@ on: push
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macOS-latest
     steps:
-      - uses: actions/checkout@v1
+      - name: checkout
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
 
       - name: Set Up JDK
         uses: actions/setup-java@v1
         with:
           java-version: 19
 
+      - name: Run Android Connected Check
+        uses: reactivecircus/android-emulator-runner@v1
+        with:
+          api-level: 29
+          script: ./gradlew connectedCheck
+
       - name: Run Android Tests
-        run: ./gradlew connectedAndroidTest
+        uses: reactivecircus/android-emulator-runner@v1
+        with:
+          api-level: 29
+          script: ./gradlew connectedAndroidTest
 
       - name: Run Unit Tests
         run: ./gradlew test
