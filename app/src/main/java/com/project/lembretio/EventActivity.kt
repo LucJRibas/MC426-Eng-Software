@@ -140,7 +140,6 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
                 Manifest.permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            Toast.makeText(applicationContext, "No notification permission", Toast.LENGTH_SHORT).show()
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 122);
         }
         notificationManagerCompat.notify(1, builder.build())

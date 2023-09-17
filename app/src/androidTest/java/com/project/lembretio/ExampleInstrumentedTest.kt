@@ -1,16 +1,20 @@
 package com.project.lembretio
 
+import android.Manifest
 import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.widget.EditText
+import androidx.core.app.ActivityCompat
 import androidx.test.core.app.launchActivity
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.rule.GrantPermissionRule;
 
 import org.awaitility.Awaitility.*
 import org.junit.Test
@@ -18,6 +22,7 @@ import org.junit.runner.RunWith
 
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Rule
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -30,10 +35,19 @@ class ExampleInstrumentedTest {
     private val adapter = EventAdapter()
     lateinit var instrumentationContext: Context
 
+    @get:Rule
+    public val mRuntimePermissionRule: GrantPermissionRule =
+        if (Build.VERSION.SDK_INT >= 33) {
+            GrantPermissionRule.grant(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
+
     @Before
     fun setup() {
         instrumentationContext = InstrumentationRegistry.getInstrumentation().targetContext
     }
+
     @Test
     fun useAppContext() {
         // Context of the app under test.

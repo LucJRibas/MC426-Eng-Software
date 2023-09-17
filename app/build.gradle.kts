@@ -64,4 +64,5 @@ dependencies {
     implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.core:core-ktx:$core_version")
     androidTestImplementation("org.awaitility:awaitility-kotlin:3.1.6")
+    androidTestImplementation("androidx.test:rules:1.4.0")
 }
