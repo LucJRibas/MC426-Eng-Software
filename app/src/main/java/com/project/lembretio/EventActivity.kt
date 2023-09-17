@@ -24,7 +24,10 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 
 class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
@@ -48,7 +51,9 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     var savedHour = 0
     var savedMinute = 0
 
-
+    private companion object{
+        private const val CHANNEL_ID = "channel_id"
+    }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -113,23 +118,32 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         pickDate()
 
         notifyButton.setOnClickListener {
-            var builder = NotificationCompat.Builder(this, "CHANNEL_ID")
-                .setContentTitle("Lembretio")
-                .setContentText("muhahahahahah")
-                .setSmallIcon(R.drawable.ic_notification)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-
-            var notificationManagerCompat = NotificationManagerCompat.from(this)
-            if (ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 122);
-            }
-
-            notificationManagerCompat.notify(1, builder.build())
+            showNotification()
         }
+    }
+
+    private fun showNotification(){
+        createNotificationChannel()
+
+        var date = Date() 
+        //val notificationId = SimpleDateFormat("ddHHmmss", Locale.US).format(date).toInt()
+
+        var builder = NotificationCompat.Builder(this, "$CHANNEL_ID")
+            .setContentTitle("Lembretio")
+            .setContentText("muhahahahahah")
+            .setSmallIcon(R.drawable.ic_notification)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+        var notificationManagerCompat = NotificationManagerCompat.from(this)
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Toast.makeText(applicationContext, "No notification permission", Toast.LENGTH_SHORT).show()
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 122);
+        }
+        notificationManagerCompat.notify(1, builder.build())
     }
 
     private fun createNotificationChannel() {
@@ -138,10 +152,11 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name: CharSequence = "MyNotification"
             val descriptionText = "kkkkkkkkk"
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel("idchannel", name, importance).apply {
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
                 description = descriptionText
             }
+            channel.enableVibration(true);
             // Register the channel with the system
             val notificationManager: NotificationManager =
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
