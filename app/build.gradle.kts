@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.adarshr.test-logger") version "3.2.0"
 }
 configurations {
     all {
