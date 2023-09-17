@@ -25,6 +25,7 @@ jobs:
           script: ./gradlew connectedCheck
 
   build:
+    runs-on: macos-latest
     steps:
       - name: checkout
         uses: actions/checkout@v3
