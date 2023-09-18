@@ -1,16 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("com.adarshr.test-logger") version "3.2.0"
-}
-configurations {
-    all {
-        resolutionStrategy {
-            // do not upgrade above 3.12.0 to support API < 21 while server uses
-            // COMPATIBLE_TLS, or okhttp3 is used in project
-            force("org.hamcrest:hamcrest:2.1")
-        }
-    }
+    id("kotlin-kapt")
 }
 
 android {
@@ -28,6 +19,12 @@ android {
     }
 
     buildTypes {
+        buildTypes {
+            create("customDebugType") {
+                isDebuggable = true
+            }
+        }
+
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -37,11 +34,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         viewBinding = true
@@ -51,6 +48,29 @@ android {
 val core_version = "1.6.0"
 
 dependencies {
+    implementation("androidx.test:monitor:1.6.1")
+    val room_version = "2.5.2"
+    implementation("androidx.room:room-common:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+
+    // To use Kotlin annotation processing tool (kapt)
+    kapt("androidx.room:room-compiler:$room_version")
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation("androidx.room:room-ktx:$room_version")
+    // optional - RxJava2 support for Room
+    implementation("androidx.room:room-rxjava2:$room_version")
+    // optional - RxJava3 support for Room
+    implementation("androidx.room:room-rxjava3:$room_version")
+    // optional - Guava support for Room, including Optional and ListenableFuture
+    implementation("androidx.room:room-guava:$room_version")
+    // optional - Test helpers
+    testImplementation("androidx.room:room-testing:$room_version")
+    // optional - Paging 3 Integration
+    implementation("androidx.room:room-paging:$room_version")
+
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -66,4 +86,9 @@ dependencies {
     implementation("androidx.core:core-ktx:$core_version")
     androidTestImplementation("org.awaitility:awaitility-kotlin:3.1.6")
     androidTestImplementation("androidx.test:rules:1.4.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.2.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.2")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.2")
+
 }

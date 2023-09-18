@@ -17,6 +17,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.TimePicker
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
@@ -29,8 +30,27 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
+data class ExplicitDate(
+    var day: Int = 0,
+    var month: Int = 0,
+    var year: Int = 0,
+    var hour: Int = 0,
+    var minute: Int = 0,
+) {
+    fun setTimeCalendar() {
+        val cal : Calendar = Calendar.getInstance()
+        day = cal.get(Calendar.DAY_OF_MONTH)
+        month = cal.get(Calendar.MONTH)
+        year = cal.get(Calendar.YEAR)
+        hour = cal.get(Calendar.HOUR)
+        minute = cal.get(Calendar.MINUTE)
+    }
+}
 
 class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+    private val eventViewModel: EventViewModel by viewModels {
+        EventModelFactory((application as EventApplication).repository)
+    }
     private lateinit var mainText: TextView
     private lateinit var notifyButton: Button
     private lateinit var dateText: TextView
@@ -39,17 +59,8 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     private lateinit var cancelButton: Button
     private lateinit var setDateButton: Button
 
-    var day = 0
-    var month = 0
-    var year = 0
-    var hour = 0
-    var minute = 0
-
-    var savedDay = 0
-    var savedMonth = 0
-    var savedYear = 0
-    var savedHour = 0
-    var savedMinute = 0
+    private val currentDate = ExplicitDate()
+    private val savedDate = ExplicitDate()
 
     private companion object{
         private const val CHANNEL_ID = "channel_id"
@@ -77,7 +88,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         notifyButton = findViewById(R.id.btnNotify)
 
         val initialTitle = intent.getStringExtra("title")
-        val eventIdx = intent.getIntExtra("idx", -1)
+        val eventId = intent.getIntExtra("event_id", -1)
         val initialDate = intent.getStringExtra("date")
 
         if (initialTitle != null) {
@@ -86,22 +97,19 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         }
 
         if(initialDate != null) {
-            dateText.setText(initialDate)
+            dateText.text = initialDate
         }
 
         submitButton.setOnClickListener {
 
             val title = editText.text.toString()
-            var date = dateText.text.toString()
+            val date = dateText.text.toString()
             if (title.isNotEmpty()){
                 val intentBack = Intent(applicationContext, MainActivity::class.java)
 
                 when(initialTitle) {
-                    null -> EventApplication.adapter?.addEvent(Event(title, false, date=date))
-                    else -> {
-                        EventApplication.adapter?.changeEventTitle(eventIdx, title)
-                        EventApplication.adapter?.changeEventDate(eventIdx, date)
-                    }
+                    null -> insertDataToDatabase(title, date)
+                    else -> updateDatabaseEvent(title, date, eventId)
                 }
 
                 startActivity(intentBack)
@@ -122,19 +130,18 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun showNotification(){
         createNotificationChannel()
-
-        var date = Date()
         //val notificationId = SimpleDateFormat("ddHHmmss", Locale.US).format(date).toInt()
 
-        var builder = NotificationCompat.Builder(this, "$CHANNEL_ID")
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("Lembretio")
             .setContentText("muhahahahahah")
             .setSmallIcon(R.drawable.ic_notification)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
-        var notificationManagerCompat = NotificationManagerCompat.from(this)
+        val notificationManagerCompat = NotificationManagerCompat.from(this)
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.POST_NOTIFICATIONS
@@ -163,34 +170,32 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         }
     }
 
-    private fun getTimeCalendar() {
-        val cal : Calendar = Calendar.getInstance()
-        day = cal.get(Calendar.DAY_OF_MONTH)
-        month = cal.get(Calendar.MONTH)
-        year = cal.get(Calendar.YEAR)
-        hour = cal.get(Calendar.HOUR)
-        minute = cal.get(Calendar.MINUTE)
-    }
-
     private fun pickDate() {
-        getTimeCalendar()
+        currentDate.setTimeCalendar()
         setDateButton = findViewById(R.id.btnSaveDate)
         setDateButton.setOnClickListener {
-            DatePickerDialog(this,this, year, month, day).show()
+            DatePickerDialog(this,this, currentDate.year, currentDate.month, currentDate.day).show()
         }
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        savedDay = dayOfMonth
-        savedMonth = month
-        savedYear = year
-        dateText.setText(dayOfMonth.toString() + "-" + (month + 1) + "-" + year)
-        TimePickerDialog(this,this,hour,minute,true).show()
+        dateText.text = "$dayOfMonth-${month + 1}-$year"
+        TimePickerDialog(this,this,currentDate.hour,currentDate.minute,true).show()
     }
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-        savedHour = hourOfDay
-        savedMinute = minute
-        dateText.setText(dateText.text.toString() + " " +  hourOfDay + ':' + minute)
+        dateText.text = "${dateText.text} $hourOfDay:$minute"
+    }
+
+    private fun insertDataToDatabase(title : String, date: String){
+        val createdEvent = Event(title,false, date)
+        eventViewModel.addEvent(createdEvent)
+        Toast.makeText(applicationContext, "Successfully Added!", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun updateDatabaseEvent(title : String, date: String, id: Int){
+        val updatedEvent = Event(title, true, date, id)
+        eventViewModel.updateEvent(updatedEvent)
+        Toast.makeText(applicationContext, "Successfully Updated!", Toast.LENGTH_SHORT).show()
     }
 }

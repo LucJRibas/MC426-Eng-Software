@@ -1,8 +1,10 @@
 package com.project.lembretio
 
-class EventApplication {
+import android.app.Application
 
-    companion object {
-        var adapter: EventAdapter? = null
-    }
+class EventApplication: Application() {
+
+    private val database by lazy { AppDatabase.getDatabase(this) }
+    val repository by lazy { EventRepository(database.eventDao()) }
+
 }

@@ -1,8 +1,13 @@
 package com.project.lembretio
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "event_table")
 data class Event(
-    var name: String,
-    val repeating: Boolean,
-    var isChecked: Boolean = false,
-    var date: String = ""
+    @ColumnInfo(name = "name") var name: String,
+    @ColumnInfo(name = "repeating") val repeating: Boolean,
+    @ColumnInfo(name = "date") var date: String = "",
+    @PrimaryKey(autoGenerate = true) val id: Int = 0
 )

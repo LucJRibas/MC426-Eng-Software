@@ -1,47 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cardView"
     android:layout_width="match_parent"
-
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
     app:cardCornerRadius="10dp"
-    android:foreground="?android:attr/selectableItemBackground"
-    android:clickable="true">
+    android:foreground="?android:attr/selectableItemBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#6750A3"
         android:gravity="start|center_vertical"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:weightSum="100">
 
-        <TextView
-            android:id="@+id/textTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
-            android:textColor="@color/cardwhite"
+        <LinearLayout
+            android:id="@+id/llEventInfo"
+            android:layout_width="0dp"
+            android:layout_weight="82"
+            android:layout_height="match_parent"
+            android:background="#6750A3"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="start|center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:textColor="@color/cardwhite"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="10dp"
+                android:textColor="@color/cardwhite"
+                android:textSize="16sp"
+                android:textStyle="normal" />
+
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnRemove"
+            android:layout_width="0dp"
+            android:layout_weight="18"
+            android:layout_height="match_parent"
+            android:background="@color/purple_700"
+            android:drawableEnd="@drawable/trash_icon"
+            android:gravity="center|center_vertical"
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/textDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="10dp"
-            android:textColor="@color/cardwhite"
-            android:textSize="16sp"
-            android:textStyle="normal" />
-
-
     </LinearLayout>
 
-
 </androidx.cardview.widget.CardView>
+
+<!--<Button-->
+<!--android:id="@+id/btnRemove"-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="match_parent"-->
+<!--android:background="@color/white"-->
+<!--android:drawableEnd="@drawable/trash_icon"-->
+<!--android:gravity="start|center_vertical"-->
+<!--android:textSize="20sp"-->
+<!--android:textStyle="bold" />-->
