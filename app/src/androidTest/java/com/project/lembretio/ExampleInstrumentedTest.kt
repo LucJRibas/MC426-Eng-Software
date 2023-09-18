@@ -83,20 +83,16 @@ class ExampleInstrumentedTest {
 
     @Test
     fun notifyButtonTest() {
-        runBlocking {
-            val event = Event(name = "Test", repeating = false)
-            eventDao.insert(event)
-            launchActivity<EventActivity>().use {
-                onView(withId(R.id.btnNotify)).perform(click())
+        launchActivity<EventActivity>().use {
+            onView(withId(R.id.btnNotify)).perform(click())
 
-                val manager: NotificationManager =
-                    instrumentationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                await.until { manager.activeNotifications.isNotEmpty() }
+            val manager: NotificationManager =
+                instrumentationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            await.until { manager.activeNotifications.isNotEmpty() }
 
-                with(manager.activeNotifications.first()) {
-                    assertEquals(id, this.id)
-                    assertEquals("Lembretio", this.notification.extras[Notification.EXTRA_TITLE])
-                }
+            with(manager.activeNotifications.first()) {
+                assertEquals(id, this.id)
+                assertEquals("Lembretio", this.notification.extras[Notification.EXTRA_TITLE])
             }
         }
     }
