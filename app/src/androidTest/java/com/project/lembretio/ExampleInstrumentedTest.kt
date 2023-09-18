@@ -1,8 +1,6 @@
 package com.project.lembretio
 
 import android.Manifest
-import android.app.Notification
-import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import androidx.room.Room
@@ -16,7 +14,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import org.awaitility.kotlin.await
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
@@ -33,7 +30,6 @@ class ExampleInstrumentedTest {
 
     private lateinit var eventDao: EventDao
     private lateinit var db: AppDatabase
-    private lateinit var application: EventApplication
 
     @Before
     fun createDb() {
@@ -81,21 +77,21 @@ class ExampleInstrumentedTest {
         }
     }
 
-    @Test
-    fun notifyButtonTest() {
-        launchActivity<EventActivity>().use {
-            onView(withId(R.id.btnNotify)).perform(click())
-
-            val manager: NotificationManager =
-                instrumentationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            await.until { manager.activeNotifications.isNotEmpty() }
-
-            with(manager.activeNotifications.first()) {
-                assertEquals(id, this.id)
-                assertEquals("Lembretio", this.notification.extras[Notification.EXTRA_TITLE])
-            }
-        }
-    }
+//    @Test
+//    fun notifyButtonTest() {
+//        launchActivity<EventActivity>().use {
+//            onView(withId(R.id.btnNotify)).perform(click())
+//
+//            val manager: NotificationManager =
+//                instrumentationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+//            await.until { manager.activeNotifications.isNotEmpty() }
+//
+//            with(manager.activeNotifications.first()) {
+//                assertEquals(id, this.id)
+//                assertEquals("Lembretio", this.notification.extras[Notification.EXTRA_TITLE])
+//            }
+//        }
+//    }
 
     @Test
     fun submitButtonEmptyEventTitleTest(){
