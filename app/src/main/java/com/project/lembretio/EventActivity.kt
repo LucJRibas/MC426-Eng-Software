@@ -60,7 +60,6 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     private lateinit var setDateButton: Button
 
     private val currentDate = ExplicitDate()
-    private val savedDate = ExplicitDate()
 
     private companion object{
         private const val CHANNEL_ID = "channel_id"
