@@ -71,6 +71,12 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event)
 
+        createToolBar()
+        findGuiElementsById()
+        setupGuiElements()
+    }
+
+    private fun createToolBar() {
         // add toolbar with back button
         val toolbar = findViewById<Toolbar>(R.id.tbEvent)
         setSupportActionBar(toolbar)
@@ -79,14 +85,19 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         toolbar.setNavigationOnClickListener {
             startActivity(Intent(applicationContext, MainActivity::class.java))
         }
+    }
 
+    private fun findGuiElementsById(){
         mainText = findViewById(R.id.rvEventActivityTitle)
         dateText = findViewById(R.id.textEventDate)
         editText = findViewById(R.id.etEventTitle)
         submitButton = findViewById(R.id.btnSubmit)
         cancelButton = findViewById(R.id.btnCancel)
         notifyButton = findViewById(R.id.btnNotify)
+    }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun setupGuiElements() {
         val initialTitle = intent.getStringExtra("title")
         val eventId = intent.getIntExtra("event_id", -1)
         val initialDate = intent.getStringExtra("date")
