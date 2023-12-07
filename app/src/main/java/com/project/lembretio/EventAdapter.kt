@@ -1,19 +1,21 @@
 package com.project.lembretio
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 
 
 class EventAdapter(
     private val events: List<Event>,
-    private val eventViewModel: EventViewModel
+    private val eventViewModel: EventViewModel,
 ) : RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
     class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
@@ -41,13 +43,25 @@ class EventAdapter(
 
                 intent.putExtra("title", event.name)
                 intent.putExtra("event_id", event.id)
-                intent.putExtra("date", event.date)
+                intent.putExtra("date", event.createdDateFormatted)
+                intent.putExtra("alarm_id", event.alarmId)
 
                 startActivity(it.context, intent, null)
             }
 
             val removeButton = findViewById<TextView>(R.id.btnRemove)
             removeButton.setOnClickListener {
+                var alarmIntent = Intent(context, AlarmReceiver::class.java)
+                val pendingIntent = PendingIntent.getBroadcast(
+                    context,
+                    event.alarmId,
+                    alarmIntent,
+                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                )
+                val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                pendingIntent?.let { _pendingIntent->
+                    alarmManager.cancel(_pendingIntent)
+                }
                 eventViewModel.deleteEvent(event)
             }
         }

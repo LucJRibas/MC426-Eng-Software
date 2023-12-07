@@ -15,10 +15,11 @@ data class Event(
     @ColumnInfo(name = "name") var name: String,
     @ColumnInfo(name = "repeating") val repeating: Boolean,
     @ColumnInfo(name = "date") var date: LocalDateTime,
+    @ColumnInfo(name = "alarm_id") var alarmId: Int,
     @PrimaryKey(autoGenerate = true) val id: Int = 0
 ) : Parcelable {
 
     val createdDateFormatted : String
-        get() =date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+        get() =date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
 
 }
