@@ -25,10 +25,10 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
-import java.util.Date
-import java.util.Locale
+
 
 data class ExplicitDate(
     var day: Int = 0,
@@ -46,7 +46,7 @@ data class ExplicitDate(
         minute = cal.get(Calendar.MINUTE)
     }
 }
-
+ 
 class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     private val eventViewModel: EventViewModel by viewModels {
         EventModelFactory((application as EventApplication).repository)
@@ -58,6 +58,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     private lateinit var submitButton: Button
     private lateinit var cancelButton: Button
     private lateinit var setDateButton: Button
+    private lateinit var event: Event
 
     private val currentDate = ExplicitDate()
 
@@ -110,10 +111,12 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
             dateText.text = initialDate
         }
 
+
         submitButton.setOnClickListener {
 
             val title = editText.text.toString()
-            val date = dateText.text.toString()
+            val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")
+            val date = LocalDateTime.parse(dateText.text.toString(), formatter)
             if (title.isNotEmpty()){
                 val intentBack = Intent(applicationContext, MainActivity::class.java)
 
@@ -189,21 +192,26 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        dateText.text = "$dayOfMonth-${month + 1}-$year"
+        val day = String.format("%02d", dayOfMonth);
+        val month = String.format("%02d", month + 1);
+        val year = String.format("%04d", year)
+        dateText.text = "$day-$month-$year"
         TimePickerDialog(this,this,currentDate.hour,currentDate.minute,true).show()
     }
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-        dateText.text = "${dateText.text} $hourOfDay:$minute"
+        val hour = String.format("%02d", hourOfDay);
+        val minute = String.format("%02d", minute)
+        dateText.text = "${dateText.text} $hour:$minute"
     }
 
-    private fun insertDataToDatabase(title : String, date: String){
+    private fun insertDataToDatabase(title : String, date: LocalDateTime){
         val createdEvent = Event(title,false, date)
         eventViewModel.addEvent(createdEvent)
         Toast.makeText(applicationContext, "Successfully Added!", Toast.LENGTH_SHORT).show()
     }
 
-    private fun updateDatabaseEvent(title : String, date: String, id: Int){
+    private fun updateDatabaseEvent(title : String, date: LocalDateTime, id: Int){
         val updatedEvent = Event(title, true, date, id)
         eventViewModel.updateEvent(updatedEvent)
         Toast.makeText(applicationContext, "Successfully Updated!", Toast.LENGTH_SHORT).show()

@@ -35,7 +35,7 @@ class EventAdapter(
             val titleText = findViewById<TextView>(R.id.textTitle)
             val dateText = findViewById<TextView>(R.id.textDate)
             titleText.text = event.name
-            dateText.text = event.date
+            dateText.text = event.createdDateFormatted
             button.setOnClickListener {
                 val intent = Intent(it.context, EventActivity::class.java)
 
