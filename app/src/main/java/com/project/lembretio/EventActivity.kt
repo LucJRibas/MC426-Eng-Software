@@ -152,7 +152,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         val cal : Calendar = Calendar.getInstance()
         val lastDate = newEvent.date
-        newEvent.date = LocalDateTime.of(year, month, dayOfMonth, 0, 0)
+        newEvent.date = LocalDateTime.of(year, month+1, dayOfMonth, 0, 0)
 
         val timePickerDialog = TimePickerDialog(this,this, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE),true)
         timePickerDialog.setOnCancelListener {
@@ -196,9 +196,6 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val t = newEvent.date.atZone(ZoneId.of("America/Sao_Paulo")).toInstant().toEpochMilli()
-        val t2 = LocalDateTime.now().atZone(ZoneId.of("America/Sao_Paulo")).toInstant().toEpochMilli()
-        Toast.makeText(applicationContext, "ok ${newEvent.createdDateFormatted} ${t-t2}", Toast.LENGTH_SHORT).show()
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             newEvent.date.atZone(ZoneId.of("America/Sao_Paulo")).toInstant().toEpochMilli(),
