@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnCreateEvent.setOnClickListener {
-            val intent = Intent(applicationContext, EventActivity::class.java)
+            val intent = Intent(applicationContext, EventPagerActivity::class.java)
             startActivity(intent)
         }
 
