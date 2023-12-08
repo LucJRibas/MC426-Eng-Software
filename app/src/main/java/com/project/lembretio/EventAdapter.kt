@@ -51,7 +51,7 @@ class EventAdapter(
 
             val removeButton = findViewById<TextView>(R.id.btnRemove)
             removeButton.setOnClickListener {
-                var alarmIntent = Intent(context, AlarmReceiver::class.java)
+                val alarmIntent = Intent(context, AlarmReceiver::class.java)
                 val pendingIntent = PendingIntent.getBroadcast(
                     context,
                     event.alarmId,

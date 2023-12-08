@@ -32,12 +32,12 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         EventModelFactory((application as EventApplication).repository)
     }
     private lateinit var mainText: TextView
-    private lateinit var notifyButton: Button
     private lateinit var dateText: TextView
     private lateinit var editText: EditText
     private lateinit var submitButton: Button
     private lateinit var cancelButton: Button
     private lateinit var setDateButton: Button
+    private lateinit var newEvent: Event
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,45 +75,46 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         val initialTitle = intent.getStringExtra("title")
         val eventId = intent.getIntExtra("event_id", -1)
         val initialDate = intent.getStringExtra("date")
-        var alarmId = intent.getIntExtra("alarm_id", 0)
+        val alarmId = intent.getIntExtra("alarm_id", 0)
+
+        newEvent = Event("", false, LocalDateTime.now(), alarmId, if (eventId == -1) 0 else eventId)
 
         if (initialTitle != null) {
             editText.setText(initialTitle)
+            newEvent.name = initialTitle;
             mainText.text = "Edit Event Here..."
         }
 
         if(initialDate != null) {
             dateText.text = initialDate
+            newEvent.name = initialDate
         }
 
-        if(alarmId == 0) {
-            alarmId = Math.toIntExact(LocalDateTime.now().getLong(ChronoField.EPOCH_DAY))
+        if(newEvent.alarmId == 0) {
+            newEvent.alarmId = Math.toIntExact(LocalDateTime.now().getLong(ChronoField.EPOCH_DAY))
+
         }
 
-        setSubmitButton(initialTitle, eventId, alarmId)
+        setSubmitButton(initialTitle != null)
         setCancelButton()
         setDateButton()
 
     }
 
-    private fun setSubmitButton(initialTitle: String?, eventId: Int, alarmId: Int) {
+    private fun setSubmitButton(isEdit: Boolean) {
         submitButton.setOnClickListener {
 
-            val title = editText.text.toString()
+            newEvent.name = editText.text.toString()
             val dateString = dateText.text.toString()
 
             if (dateString.isNotEmpty()) {
-                val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")
-                val date = LocalDateTime.parse(dateString, formatter)
-                if (title.isNotEmpty()) {
+                if (newEvent.name.isNotEmpty()) {
                     val intentBack = Intent(applicationContext, MainActivity::class.java)
 
-                    when (initialTitle) {
-                        null -> insertDataToDatabase(title, date, alarmId)
-                        else -> updateDatabaseEvent(title, date, alarmId, eventId)
-                    }
+                    if (!isEdit) insertDataToDatabase()
+                    else updateDatabaseEvent()
 
-                    scheduleAlarm(title, date, alarmId)
+                    scheduleAlarm()
 
                     startActivity(intentBack)
                 } else {
@@ -150,17 +151,16 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         val cal : Calendar = Calendar.getInstance()
-        val day = String.format("%02d", dayOfMonth);
-        val month = String.format("%02d", month + 1);
-        val year = String.format("%04d", year)
-        val lastDate = dateText.text
-        dateText.text = "$day-$month-$year"
-        val timePickerDialog = TimePickerDialog(this,this,cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE),true)
+        val lastDate = newEvent.date
+        newEvent.date = LocalDateTime.of(year, month, dayOfMonth, 0, 0)
+
+        val timePickerDialog = TimePickerDialog(this,this, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE),true)
         timePickerDialog.setOnCancelListener {
-            dateText.text = lastDate
+            newEvent.date = lastDate
+            dateText.text = ""
             Toast.makeText(
                 applicationContext,
-                "A data foi não pode ser definida.",
+                "A data não pode ser definida.",
                 Toast.LENGTH_SHORT
             ).show()   //shows the toast if input field is empty
         }
@@ -169,37 +169,39 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     }
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-        val hour = String.format("%02d", hourOfDay);
-        val minute = String.format("%02d", minute)
-        dateText.text = "${dateText.text} $hour:$minute"
+        newEvent.run {
+            date = LocalDateTime.of(date.year, date.month, date.dayOfMonth, hourOfDay, minute)
+        }
+        dateText.text = newEvent.createdDateFormatted
     }
 
-    private fun insertDataToDatabase(title : String, date: LocalDateTime, alarmId: Int){
-        val createdEvent = Event(title,false, date, alarmId)
-        eventViewModel.addEvent(createdEvent)
+    private fun insertDataToDatabase(){
+        eventViewModel.addEvent(newEvent)
         Toast.makeText(applicationContext, "Successfully Added!", Toast.LENGTH_SHORT).show()
     }
 
-    private fun updateDatabaseEvent(title : String, date: LocalDateTime, alarmId: Int, id: Int){
-        val updatedEvent = Event(title, true, date, alarmId, id)
-        eventViewModel.updateEvent(updatedEvent)
+    private fun updateDatabaseEvent(){
+        eventViewModel.updateEvent(newEvent)
         Toast.makeText(applicationContext, "Successfully Updated!", Toast.LENGTH_SHORT).show()
     }
 
-    private fun scheduleAlarm(title: String, date: LocalDateTime, alarmId: Int){
-        var alarmIntent = Intent(applicationContext, AlarmReceiver::class.java)
-        alarmIntent.putExtra("title", title)
-        alarmIntent.putExtra("text", date.toString())
+    private fun scheduleAlarm(){
+        val alarmIntent = Intent(applicationContext, AlarmReceiver::class.java)
+        alarmIntent.putExtra("title", newEvent.name)
+        alarmIntent.putExtra("text", newEvent.createdDateFormatted)
         val pendingIntent = PendingIntent.getBroadcast(
             applicationContext,
-            alarmId,
+            newEvent.alarmId,
             alarmIntent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val t = newEvent.date.atZone(ZoneId.of("America/Sao_Paulo")).toInstant().toEpochMilli()
+        val t2 = LocalDateTime.now().atZone(ZoneId.of("America/Sao_Paulo")).toInstant().toEpochMilli()
+        Toast.makeText(applicationContext, "ok ${newEvent.createdDateFormatted} ${t-t2}", Toast.LENGTH_SHORT).show()
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
-            date.atZone(ZoneId.of("America/Sao_Paulo")).toInstant().toEpochMilli(),
+            newEvent.date.atZone(ZoneId.of("America/Sao_Paulo")).toInstant().toEpochMilli(),
             pendingIntent
         )
     }
