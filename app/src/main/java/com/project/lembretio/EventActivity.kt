@@ -10,6 +10,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.DatePicker
 import android.widget.EditText
@@ -87,7 +88,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
 
         if(initialDate != null) {
             dateText.text = initialDate
-            newEvent.name = initialDate
+            newEvent.setDateFromString(initialDate)
         }
 
         if(newEvent.alarmId == 0) {
@@ -151,13 +152,14 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         val cal : Calendar = Calendar.getInstance()
+        val lastDateText = dateText.text
         val lastDate = newEvent.date
         newEvent.date = LocalDateTime.of(year, month+1, dayOfMonth, 0, 0)
 
         val timePickerDialog = TimePickerDialog(this,this, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE),true)
         timePickerDialog.setOnCancelListener {
             newEvent.date = lastDate
-            dateText.text = ""
+            dateText.text = lastDateText
             Toast.makeText(
                 applicationContext,
                 "A data não pode ser definida.",
@@ -186,9 +188,12 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     }
 
     private fun scheduleAlarm(){
+
         val alarmIntent = Intent(applicationContext, AlarmReceiver::class.java)
         alarmIntent.putExtra("title", newEvent.name)
-        alarmIntent.putExtra("text", newEvent.createdDateFormatted)
+        alarmIntent.putExtra("event_id", newEvent.id)
+        alarmIntent.putExtra("date", newEvent.createdDateFormatted)
+        alarmIntent.putExtra("alarm_id", newEvent.alarmId)
         val pendingIntent = PendingIntent.getBroadcast(
             applicationContext,
             newEvent.alarmId,
