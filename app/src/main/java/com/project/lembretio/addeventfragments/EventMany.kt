@@ -14,6 +14,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.TimePicker
 import android.widget.Toast
+import androidx.core.view.indices
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -44,13 +45,13 @@ class EventMany : Fragment() {
         spinner = layout.findViewById<Spinner>(R.id.spinner_many)
         recycler = layout.findViewById<RecyclerView>(R.id.recycler_many)
         recycler.layoutManager = LinearLayoutManager(context)
-        val adapter = manyAdapter()
+        val adapter = ManyAdapter()
         recycler.adapter = adapter
         populateSpinner()
         var viewPager: ViewPager2? = activity?.findViewById<ViewPager2>(R.id.view_pager)
         spinner.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                adapter.notifyDataSetChanged()
+                adapter.makeSize(spinner.selectedItem.toString().toInt())
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -79,21 +80,22 @@ class EventMany : Fragment() {
             EventMany()
     }
 
-    private inner class manyAdapter : RecyclerView.Adapter<manyAdapter.manyHolder>(){
+    private inner class ManyAdapter : RecyclerView.Adapter<ManyAdapter.ManyHolder>(){
 
-        private inner class manyHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+        private var times: MutableList<String> = mutableListOf("00:00")
+        inner class ManyHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {}
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): manyHolder {
-            return manyHolder(
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ManyHolder {
+            return ManyHolder(
                 layoutInflater.inflate(R.layout.single_date, parent, false)
             )
         }
 
-        override fun onBindViewHolder(holder: manyHolder, position: Int) {
+        override fun onBindViewHolder(holder: ManyHolder, position: Int) {
             holder.itemView.apply {
                 val button = findViewById<Button>(R.id.single_date_btn)
                 val text = findViewById<TextView>(R.id.single_date_text)
-                text.text = position.toString()
+                text.text = times[position]
                 button.setOnClickListener {
                     val cal : Calendar = Calendar.getInstance()
                     var setTimeListener = TimePickerDialog.OnTimeSetListener{
@@ -101,6 +103,7 @@ class EventMany : Fragment() {
                         val hour = String.format("%02d", hour);
                         val minute = String.format("%02d", minute)
                         text.text = hour+":"+minute
+                        times[position] =  hour+":"+minute
                     }
                     val timePickerDialog = TimePickerDialog(context,setTimeListener,cal.get(Calendar.HOUR_OF_DAY), cal.get(
                         Calendar.MINUTE),true)
@@ -118,7 +121,18 @@ class EventMany : Fragment() {
         }
 
         override fun getItemCount(): Int {
-            return spinner.selectedItem.toString().toInt()
+            return times.size
+        }
+
+        fun makeSize(size: Int) {
+            if (size<times.size) {
+                times = times.filterIndexed { i, _ -> i < size }.toMutableList()
+            } else {
+                for(i in 0 until size - times.size){
+                    times.add("00:00")
+                }
+            }
+            notifyDataSetChanged()
         }
     }
 }

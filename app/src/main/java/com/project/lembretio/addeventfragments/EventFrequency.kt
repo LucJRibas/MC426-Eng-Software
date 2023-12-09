@@ -35,10 +35,9 @@ class EventFrequency : Fragment() {
         radioWeek = layout.findViewById<RadioButton>(R.id.radio_btn_week)
         var viewPager: ViewPager2? = activity?.findViewById<ViewPager2>(R.id.view_pager)
         nextButton.setOnClickListener {
-            if(radioMany.isChecked){
+            if(radioMany.isChecked) {
                 viewPager?.currentItem = viewPager?.currentItem?.plus(1)!!
-            }
-            if(radioWeek.isChecked){
+            } else if(radioWeek.isChecked){
                 viewPager?.currentItem = viewPager?.currentItem?.plus(2)!!
             } else {
                 val intentBack = Intent(context, MainActivity::class.java)

@@ -17,6 +17,6 @@ class EventPagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
         }
     }
     override fun getItemCount(): Int {
-        return 3
+        return 4
     }
 }
