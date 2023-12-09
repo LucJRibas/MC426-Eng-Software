@@ -2,12 +2,16 @@ package com.project.lembretio
 
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlarmManager
 import android.app.DatePickerDialog
 import android.app.PendingIntent
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.media.Ringtone
+import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -17,6 +21,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.TimePicker
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
@@ -24,9 +29,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoField
 import java.util.Calendar
+
 
 class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     private val eventViewModel: EventViewModel by viewModels {
@@ -39,11 +44,13 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     private lateinit var cancelButton: Button
     private lateinit var setDateButton: Button
     private lateinit var newEvent: Event
+    private var uri: Uri? = null
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event)
+        AlarmReceiver.ringtone?.stop()
 
         createToolBar()
         findGuiElementsById()
@@ -135,9 +142,24 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun setCancelButton() {
+        val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val ringtoneIntent: Intent? = result.data
+                uri = ringtoneIntent?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
+            }
+        }
         cancelButton.setOnClickListener {
-            startActivity(Intent(applicationContext, MainActivity::class.java))
+            Toast.makeText(applicationContext, "adsfasfdasd", Toast.LENGTH_SHORT).show()
+            val ringtoneIntent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
+            ringtoneIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM)
+            ringtoneIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Selecione um toque de alarme")
+            ringtoneIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, null as Uri?)
+            resultLauncher.launch(ringtoneIntent)
+
+
+//            startActivity(Intent(applicationContext, MainActivity::class.java))
         }
     }
 
@@ -194,6 +216,8 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         alarmIntent.putExtra("event_id", newEvent.id)
         alarmIntent.putExtra("date", newEvent.createdDateFormatted)
         alarmIntent.putExtra("alarm_id", newEvent.alarmId)
+        alarmIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI, uri)
+
         val pendingIntent = PendingIntent.getBroadcast(
             applicationContext,
             newEvent.alarmId,
