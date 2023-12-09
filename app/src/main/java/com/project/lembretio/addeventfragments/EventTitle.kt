@@ -1,4 +1,4 @@
-package com.project.lembretio
+package com.project.lembretio.addeventfragments
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.viewpager2.widget.ViewPager2
+import com.project.lembretio.MainActivity
+import com.project.lembretio.R
 
 class EventTitle : Fragment() {
 

@@ -10,6 +10,7 @@ class EventPagerActivity : AppCompatActivity(){
         setContentView(R.layout.activity_event_pager)
         val viewPager2 = findViewById<ViewPager2>(R.id.view_pager)
         val adapter = EventPagerAdapter(this)
+        viewPager2.isUserInputEnabled = false
         viewPager2.adapter = adapter
     }
 }
