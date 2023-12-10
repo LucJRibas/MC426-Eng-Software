@@ -50,7 +50,7 @@ class EventAdapter(
             }
 
             val removeButton = findViewById<TextView>(R.id.btnRemove)
-//            removeButton.setOnClickListener {
+            removeButton.setOnClickListener {
 //                val alarmIntent = Intent(context, AlarmReceiver::class.java)
 //                val pendingIntent = PendingIntent.getBroadcast(
 //                    context,
@@ -62,8 +62,8 @@ class EventAdapter(
 //                pendingIntent?.let { _pendingIntent->
 //                    alarmManager.cancel(_pendingIntent)
 //                }
-//                eventViewModel.deleteEvent(event)
-//            }
+                eventViewModel.deleteEvent(event)
+            }
         }
     }
 
