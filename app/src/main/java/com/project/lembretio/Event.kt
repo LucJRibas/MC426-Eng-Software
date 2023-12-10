@@ -22,4 +22,8 @@ data class Event(
     val createdDateFormatted : String
         get() =date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
 
+    fun setDateFromString(stringDate: String) {
+        date = LocalDateTime.parse(stringDate, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+    }
+
 }
