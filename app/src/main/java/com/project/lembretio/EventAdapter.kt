@@ -39,31 +39,31 @@ class EventAdapter(
             titleText.text = event.name
             dateText.text = event.createdDateFormatted
             button.setOnClickListener {
-                val intent = Intent(it.context, EventActivity::class.java)
-
-                intent.putExtra("title", event.name)
-                intent.putExtra("event_id", event.id)
-                intent.putExtra("date", event.createdDateFormatted)
-                intent.putExtra("alarm_id", event.alarmId)
-
-                startActivity(it.context, intent, null)
+//                val intent = Intent(it.context, EventActivity::class.java)
+//
+//                intent.putExtra("title", event.name)
+//                intent.putExtra("event_id", event.id)
+//                intent.putExtra("date", event.createdDateFormatted)
+//                intent.putExtra("alarm_id", event.alarmId)
+//
+//                startActivity(it.context, intent, null)
             }
 
             val removeButton = findViewById<TextView>(R.id.btnRemove)
-            removeButton.setOnClickListener {
-                val alarmIntent = Intent(context, AlarmReceiver::class.java)
-                val pendingIntent = PendingIntent.getBroadcast(
-                    context,
-                    event.alarmId,
-                    alarmIntent,
-                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-                )
-                val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                pendingIntent?.let { _pendingIntent->
-                    alarmManager.cancel(_pendingIntent)
-                }
-                eventViewModel.deleteEvent(event)
-            }
+//            removeButton.setOnClickListener {
+//                val alarmIntent = Intent(context, AlarmReceiver::class.java)
+//                val pendingIntent = PendingIntent.getBroadcast(
+//                    context,
+//                    event.alarmId,
+//                    alarmIntent,
+//                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+//                )
+//                val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//                pendingIntent?.let { _pendingIntent->
+//                    alarmManager.cancel(_pendingIntent)
+//                }
+//                eventViewModel.deleteEvent(event)
+//            }
         }
     }
 

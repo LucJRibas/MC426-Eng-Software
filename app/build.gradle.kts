@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("kotlin-parcelize")
+    id("kotlinx-serialization")
 }
 
 android {
@@ -50,6 +51,7 @@ val core_version = "1.6.0"
 
 dependencies {
     implementation("androidx.test:monitor:1.6.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
     implementation("androidx.core:core-ktx:+")
     val room_version = "2.5.2"
     implementation("androidx.room:room-common:$room_version")

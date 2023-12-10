@@ -26,6 +26,7 @@ class EventDate : Fragment() {
     private lateinit var nextButton: Button
     private lateinit var prevButton: Button
     private lateinit var dateButton: Button
+    private lateinit var dateText: TextView
     private lateinit var titleText: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +42,7 @@ class EventDate : Fragment() {
         prevButton = layout.findViewById(R.id.btn_title_prev)
         dateButton = layout.findViewById(R.id.btn_date_pick)
         titleText = layout.findViewById(R.id.date_title_text)
+        dateText = layout.findViewById(R.id.tv_date)
 
         val viewPager: ViewPager2? = activity?.findViewById(R.id.view_pager)
 
@@ -50,6 +52,7 @@ class EventDate : Fragment() {
             context?.let {
                 val setDateListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
                     date = LocalDate.of(year, month + 1, dayOfMonth)
+                    dateText.text = date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
                 }
 
                 val datePickerDialog = DatePickerDialog(it, setDateListener, date.year, date.monthValue, date.dayOfYear)
