@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.viewpager2.widget.ViewPager2
 import com.project.lembretio.EventCreator
 import com.project.lembretio.MainActivity
@@ -46,24 +47,33 @@ class EventDate : Fragment() {
 
         val viewPager: ViewPager2? = activity?.findViewById(R.id.view_pager)
 
-        var date = LocalDate.now()
+        var date: LocalDate? = null
 
         dateButton.setOnClickListener {
             context?.let {
                 val setDateListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
                     date = LocalDate.of(year, month + 1, dayOfMonth)
-                    dateText.text = date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                    dateText.text = date?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
                 }
 
-                val datePickerDialog = DatePickerDialog(it, setDateListener, date.year, date.monthValue, date.dayOfYear)
+                val today = LocalDate.now()
+                val datePickerDialog = DatePickerDialog(it, setDateListener, today.year, today.monthValue, today.dayOfYear)
                 datePickerDialog.setCancelable(false)
                 datePickerDialog.show()
             }
         }
 
         nextButton.setOnClickListener {
-            (context as EventCreator).date = date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-            viewPager?.currentItem = viewPager?.currentItem?.plus(1)!!
+            if (date != null) {
+                if (date!!.isBefore(LocalDate.now())) {
+                    Toast.makeText(context, "Por favor selecione uma data futura", Toast.LENGTH_SHORT).show()
+                } else {
+                    (context as EventCreator).date = date!!.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                    viewPager?.currentItem = viewPager?.currentItem?.plus(1)!!
+                }
+            } else  {
+                Toast.makeText(context, "Por favor selecione uma data", Toast.LENGTH_SHORT).show()
+            }
         }
         prevButton.setOnClickListener {
             viewPager?.currentItem = viewPager?.currentItem?.minus(1)!!

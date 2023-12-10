@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.viewpager2.widget.ViewPager2
 import com.project.lembretio.EventCreator
 import com.project.lembretio.MainActivity
@@ -34,8 +35,12 @@ class EventTitle : Fragment() {
 
         val viewPager: ViewPager2? = activity?.findViewById(R.id.view_pager)
         nextButton.setOnClickListener {
-            (context as EventCreator).name = editText.text.toString()
-            viewPager?.currentItem = viewPager?.currentItem?.plus(1)!!
+            if (editText.text.toString() == "") {
+                Toast.makeText(context, "Por favor coloque um nome de remédio", Toast.LENGTH_SHORT).show()
+            } else {
+                (context as EventCreator).name = editText.text.toString()
+                viewPager?.currentItem = viewPager?.currentItem?.plus(1)!!
+            }
         }
         prevButton.setOnClickListener {
             val intentBack = Intent(context, MainActivity::class.java)
