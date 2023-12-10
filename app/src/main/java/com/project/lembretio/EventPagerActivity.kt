@@ -1,16 +1,10 @@
 package com.project.lembretio
 
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 interface EventCreator {
     var name: String
@@ -41,7 +35,10 @@ class EventPagerActivity : AppCompatActivity(), EventCreator{
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event_pager)
         val viewPager2 = findViewById<ViewPager2>(R.id.view_pager)
-        val adapter = EventPagerAdapter(this)
+
+        val isMedication = intent.getBooleanExtra("isMed", false)
+
+        val adapter = if (isMedication) MedicationPagerAdapter(this) else AppointmentPagerAdapter(this)
         viewPager2.isUserInputEnabled = false
         viewPager2.adapter = adapter
 
@@ -66,11 +63,10 @@ class EventPagerActivity : AppCompatActivity(), EventCreator{
 
         alarmId = intent.getIntExtra("alarm_id", 0)
 
-        uri = intent.getParcelableExtra<Uri>("uri")
+        uri = intent.getParcelableExtra("uri")
     }
 
     override fun addEvent(event: Event) {
         eventViewModel.addEvent(event)
-//        Toast.makeText(applicationContext, "Medição adicionada!", Toast.LENGTH_SHORT).show()
     }
 }
