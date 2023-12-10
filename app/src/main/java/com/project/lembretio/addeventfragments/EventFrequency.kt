@@ -19,6 +19,7 @@ class EventFrequency : Fragment() {
     private lateinit var nextButton: Button
     private lateinit var prevButton: Button
     private lateinit var radioMany: RadioButton
+    private lateinit var radioOne: RadioButton
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,7 +29,11 @@ class EventFrequency : Fragment() {
         nextButton = layout.findViewById(R.id.btn_date_next)
         prevButton = layout.findViewById(R.id.btn_date_prev)
         radioMany = layout.findViewById(R.id.radio_btn_many)
-        radioMany.isChecked = true
+        radioOne = layout.findViewById(R.id.radio_btn_one)
+
+        radioMany.isChecked = (context as EventCreator).repeating
+        radioOne.isChecked = !radioMany.isChecked
+
         val viewPager: ViewPager2? = activity?.findViewById(R.id.view_pager)
         nextButton.setOnClickListener {
             (context as EventCreator).repeating = radioMany.isChecked

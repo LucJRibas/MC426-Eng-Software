@@ -17,7 +17,7 @@ data class Event(
     @ColumnInfo(name = "name") var name: String,
     @ColumnInfo(name = "repeating") var repeating: Boolean,
     @ColumnInfo(name = "date") var date: LocalDate,
-    @ColumnInfo(name = "times") var mutableList: MutableList<LocalTime>,
+    @ColumnInfo(name = "times") var times: MutableList<LocalTime>,
     @ColumnInfo(name = "alarm_id") var alarmId: Int,
     @ColumnInfo(name = "uri") var uri: Uri?,
     @PrimaryKey(autoGenerate = true) val id: Int = 0

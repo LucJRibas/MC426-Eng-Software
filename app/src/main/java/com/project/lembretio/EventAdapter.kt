@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.project.lembretio.utils.Converters
 
 
 class EventAdapter(
@@ -39,14 +41,17 @@ class EventAdapter(
             titleText.text = event.name
             dateText.text = event.createdDateFormatted
             button.setOnClickListener {
-//                val intent = Intent(it.context, EventActivity::class.java)
-//
-//                intent.putExtra("title", event.name)
-//                intent.putExtra("event_id", event.id)
-//                intent.putExtra("date", event.createdDateFormatted)
-//                intent.putExtra("alarm_id", event.alarmId)
-//
-//                startActivity(it.context, intent, null)
+                val intent = Intent(it.context, EventPagerActivity::class.java)
+
+                intent.putExtra("title", event.name)
+                intent.putExtra("event_id", event.id)
+                intent.putExtra("repeating", event.repeating)
+                intent.putExtra("date", event.createdDateFormatted)
+                intent.putExtra("times", event.times.joinToString(separator = " ") { time -> time.toString() })
+                intent.putExtra("alarm_id", event.alarmId)
+                intent.putExtra("uri", event.uri)
+
+                startActivity(it.context, intent, null)
             }
 
             val removeButton = findViewById<TextView>(R.id.btnRemove)

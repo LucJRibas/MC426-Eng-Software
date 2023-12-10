@@ -48,6 +48,12 @@ class EventAlarm : Fragment() {
 
         val viewPager: ViewPager2? = activity?.findViewById(R.id.view_pager)
 
+        if ((context as EventCreator).uri != null) {
+            uri = (context as EventCreator).uri
+            val ringtone = RingtoneManager.getRingtone(context, uri)
+            alarmText.text = ringtone.getTitle(context)
+        }
+
 
         val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -69,15 +75,15 @@ class EventAlarm : Fragment() {
 
         nextButton.setOnClickListener {
             val builder = (context as EventCreator)
-            val alarmId = Math.toIntExact(LocalDateTime.now().getLong(ChronoField.EPOCH_DAY))
             val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
             builder.addEvent(Event(
                 builder.name,
                 builder.repeating,
                 LocalDate.parse(builder.date, formatter),
                 builder.times.map { LocalTime.parse(it) }.toMutableList(),
-                alarmId,
-                uri
+                if (builder.alarmId == 0) Math.toIntExact(LocalDateTime.now().getLong(ChronoField.EPOCH_DAY)) else builder.alarmId,
+                uri,
+                if (builder.eventId == -1) 0 else builder.eventId
             ))
             val intentBack = Intent(context, MainActivity::class.java)
             startActivity(intentBack)

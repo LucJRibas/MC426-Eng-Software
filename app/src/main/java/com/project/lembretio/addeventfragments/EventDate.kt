@@ -49,6 +49,12 @@ class EventDate : Fragment() {
 
         var date: LocalDate? = null
 
+        if ((context as EventCreator).date != "") {
+            date = LocalDate.parse((context as EventCreator).date, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+            dateText.text = (context as EventCreator).date
+
+        }
+
         dateButton.setOnClickListener {
             context?.let {
                 val setDateListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->

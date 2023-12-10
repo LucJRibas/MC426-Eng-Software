@@ -46,7 +46,10 @@ class EventMany : Fragment() {
         spinner = layout.findViewById(R.id.spinner_many)
         recycler = layout.findViewById(R.id.recycler_many)
         recycler.layoutManager = LinearLayoutManager(context)
-        val adapter = ManyAdapter()
+
+        if ((context as EventCreator).times.isEmpty()) (context as EventCreator).times.add("00:00")
+        val adapter = ManyAdapter((context as EventCreator).times)
+
         recycler.adapter = adapter
         populateSpinner()
         val viewPager: ViewPager2? = activity?.findViewById(R.id.view_pager)
@@ -81,10 +84,10 @@ class EventMany : Fragment() {
             EventMany()
     }
 
-    private inner class ManyAdapter : RecyclerView.Adapter<ManyAdapter.ManyHolder>(){
+    private inner class ManyAdapter (
+        var times: MutableList<String>
+    ) : RecyclerView.Adapter<ManyAdapter.ManyHolder>(){
 
-        var times: MutableList<String> = mutableListOf("00:00")
-            private set
         inner class ManyHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {}
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ManyHolder {

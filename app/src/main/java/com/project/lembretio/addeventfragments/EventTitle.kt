@@ -33,6 +33,8 @@ class EventTitle : Fragment() {
         prevButton = layout.findViewById(R.id.btn_title_prev)
         editText = layout.findViewById(R.id.edit_text_title)
 
+        editText.setText((context as EventCreator).name)
+
         val viewPager: ViewPager2? = activity?.findViewById(R.id.view_pager)
         nextButton.setOnClickListener {
             if (editText.text.toString() == "") {
