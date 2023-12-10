@@ -53,7 +53,7 @@ class AlarmReceiver : BroadcastReceiver() {
     }
 
     private fun showNotification(context: Context, title: String?, date: String?, eventId: Int, alarmId: Int, uri: Uri?){
-        //TODO ir para histórico
+        //TODO ir para histórico -> Deletar evento?
         val eventIntent = Intent(context, MainActivity::class.java)
         eventIntent.component = ComponentName(context.packageName, MainActivity::class.java.name)
         eventIntent.putExtra("title", title)
