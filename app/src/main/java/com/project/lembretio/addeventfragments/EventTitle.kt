@@ -1,19 +1,22 @@
 package com.project.lembretio.addeventfragments
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.project.lembretio.EventCreator
 import com.project.lembretio.MainActivity
 import com.project.lembretio.R
+
 
 class EventTitle : Fragment() {
 
@@ -45,6 +48,14 @@ class EventTitle : Fragment() {
                 Toast.makeText(context, "Por favor coloque um nome de remédio", Toast.LENGTH_SHORT).show()
             } else {
                 (context as EventCreator).name = editText.text.toString()
+
+                val imm = activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                var view = activity?.currentFocus
+                if (view == null) {
+                    view = View(activity)
+                }
+                imm.hideSoftInputFromWindow(view.windowToken, 0)
+
                 viewPager?.currentItem = viewPager?.currentItem?.plus(1)!!
             }
         }

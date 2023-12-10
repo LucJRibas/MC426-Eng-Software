@@ -39,7 +39,11 @@ class EventAdapter(
             val titleText = findViewById<TextView>(R.id.textTitle)
             val dateText = findViewById<TextView>(R.id.textDate)
             titleText.text = event.name
-            dateText.text = event.createdDateFormatted
+            if (event.repeating) {
+                dateText.text = "Todos os dias: ${event.times.joinToString(separator = " ") { it.toString() }}"
+            } else {
+                dateText.text = "${event.createdDateFormatted} ${event.times.joinToString(separator = " ") { it.toString() }}"
+            }
             button.setOnClickListener {
                 val intent = Intent(it.context, EventPagerActivity::class.java)
 
