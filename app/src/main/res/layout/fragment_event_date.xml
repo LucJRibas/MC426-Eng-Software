@@ -6,22 +6,23 @@
     android:layout_height="match_parent"
     android:layout_alignParentBottom="false"
     android:orientation="vertical"
-    tools:context=".addeventfragments.EventFrequency">
+    tools:context=".addeventfragments.EventDate">
 
     <Button
-        android:id="@+id/btn_date_prev"
+        android:id="@+id/btn_title_prev"
         android:layout_width="0dp"
         android:layout_height="80dp"
         android:layout_margin="5dp"
+        android:enabled="true"
         android:text="Voltar"
         android:textSize="30dp"
         app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btn_date_next"
+        app:layout_constraintEnd_toStartOf="@id/btn_title_next"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btn_date_next"
+        android:id="@+id/btn_title_next"
         android:layout_width="0dp"
         android:layout_height="80dp"
         android:layout_margin="5dp"
@@ -30,51 +31,36 @@
         app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btn_date_prev" />
+        app:layout_constraintStart_toEndOf="@id/btn_title_prev" />
 
     <TextView
-        android:id="@+id/event_date_text"
+        android:id="@+id/date_title_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="10dp"
-        android:text="Quão frequentemente você toma esse medicamento?"
+        android:text="A partir de qual data você começará a tomar o medicamento?"
         android:textSize="40dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/radio_frequency"
+        app:layout_constraintBottom_toTopOf="@id/btn_date_pick"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed" />
 
-    <RadioGroup
-        android:id="@+id/radio_frequency"
+    <Button
+        android:id="@+id/btn_date_pick"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_date_prev"
+        android:layout_height="80dp"
+        android:layout_margin="5dp"
+        android:text="Escolher Data"
+        android:textSize="30dp"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/event_date_text">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <RadioButton
-            android:id="@+id/radio_btn_many"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="Todo dia"
-            android:textSize="20dp" />
-
-        <RadioButton
-            android:id="@+id/radio_btn_one"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="Um dia específico"
-            android:textSize="20dp" />
-
-    </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

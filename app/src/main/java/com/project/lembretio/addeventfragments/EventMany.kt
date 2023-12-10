@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.project.lembretio.EventCreator
 import com.project.lembretio.MainActivity
 import com.project.lembretio.R
 import java.util.Calendar
@@ -39,17 +40,17 @@ class EventMany : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var layout = inflater.inflate(R.layout.fragment_event_many, container, false)
-        nextButton = layout.findViewById<Button>(R.id.btn_many_next)
-        prevButton = layout.findViewById<Button>(R.id.btn_many_prev)
-        spinner = layout.findViewById<Spinner>(R.id.spinner_many)
-        recycler = layout.findViewById<RecyclerView>(R.id.recycler_many)
+        val layout = inflater.inflate(R.layout.fragment_event_many, container, false)
+        nextButton = layout.findViewById(R.id.btn_many_next)
+        prevButton = layout.findViewById(R.id.btn_many_prev)
+        spinner = layout.findViewById(R.id.spinner_many)
+        recycler = layout.findViewById(R.id.recycler_many)
         recycler.layoutManager = LinearLayoutManager(context)
         val adapter = ManyAdapter()
         recycler.adapter = adapter
         populateSpinner()
-        var viewPager: ViewPager2? = activity?.findViewById<ViewPager2>(R.id.view_pager)
-        spinner.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+        val viewPager: ViewPager2? = activity?.findViewById(R.id.view_pager)
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 adapter.makeSize(spinner.selectedItem.toString().toInt())
             }
@@ -57,10 +58,10 @@ class EventMany : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 TODO("Not yet implemented")
             }
-        })
+        }
         nextButton.setOnClickListener {
-            val intentBack = Intent(context, MainActivity::class.java)
-            startActivity(intentBack)
+            (context as EventCreator).times = adapter.times
+            viewPager?.currentItem = viewPager?.currentItem?.plus(1)!!
         }
         prevButton.setOnClickListener {
             viewPager?.currentItem = viewPager?.currentItem?.minus(1)!!
@@ -69,7 +70,7 @@ class EventMany : Fragment() {
     }
 
     private fun populateSpinner(){
-        val items: MutableList<Int> = MutableList<Int>(10) {index -> 1 + index}
+        val items: MutableList<Int> = MutableList(10) { index -> 1 + index}
         val adapter: ArrayAdapter<Int>? =
             context?.let { ArrayAdapter<Int>(it, android.R.layout.simple_spinner_item, items) }
         spinner.adapter = adapter
@@ -82,7 +83,8 @@ class EventMany : Fragment() {
 
     private inner class ManyAdapter : RecyclerView.Adapter<ManyAdapter.ManyHolder>(){
 
-        private var times: MutableList<String> = mutableListOf("00:00")
+        var times: MutableList<String> = mutableListOf("00:00")
+            private set
         inner class ManyHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {}
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ManyHolder {
@@ -98,12 +100,12 @@ class EventMany : Fragment() {
                 text.text = times[position]
                 button.setOnClickListener {
                     val cal : Calendar = Calendar.getInstance()
-                    var setTimeListener = TimePickerDialog.OnTimeSetListener{
-                        timePicker, hour, minute ->
-                        val hour = String.format("%02d", hour);
-                        val minute = String.format("%02d", minute)
-                        text.text = hour+":"+minute
-                        times[position] =  hour+":"+minute
+                    val setTimeListener = TimePickerDialog.OnTimeSetListener{
+                            _, pickedHour, pickedMinute ->
+                        val hour = String.format("%02d", pickedHour);
+                        val minute = String.format("%02d", pickedMinute)
+                        text.text = "$hour:$minute"
+                        times[position] =  "$hour:$minute"
                     }
                     val timePickerDialog = TimePickerDialog(context,setTimeListener,cal.get(Calendar.HOUR_OF_DAY), cal.get(
                         Calendar.MINUTE),true)
