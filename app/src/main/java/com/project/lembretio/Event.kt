@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter
 @Parcelize
 data class Event(
     @ColumnInfo(name = "name") var name: String,
-    @ColumnInfo(name = "repeating") val repeating: Boolean,
+    @ColumnInfo(name = "repeating") var repeating: Boolean,
     @ColumnInfo(name = "date") var date: LocalDateTime,
     @ColumnInfo(name = "alarm_id") var alarmId: Int,
     @PrimaryKey(autoGenerate = true) val id: Int = 0

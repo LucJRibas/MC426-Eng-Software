@@ -50,6 +50,7 @@ val core_version = "1.6.0"
 
 dependencies {
     implementation("androidx.test:monitor:1.6.1")
+    implementation("androidx.core:core-ktx:+")
     val room_version = "2.5.2"
     implementation("androidx.room:room-common:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
