@@ -38,7 +38,7 @@ class EventPagerActivity : AppCompatActivity(), EventCreator{
         setContentView(R.layout.activity_event_pager)
         val viewPager2 = findViewById<ViewPager2>(R.id.view_pager)
 
-        isMedication = intent.getBooleanExtra("is_med", false)
+        isMedication = intent.getBooleanExtra("is_med", true)
 
         val adapter = if (isMedication) MedicationPagerAdapter(this) else AppointmentPagerAdapter(this)
         viewPager2.isUserInputEnabled = false
