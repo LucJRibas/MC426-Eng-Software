@@ -1,6 +1,9 @@
 package com.project.lembretio.addeventfragments
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -19,6 +22,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.project.lembretio.AlarmReceiver
 import com.project.lembretio.EventCreator
 import com.project.lembretio.MainActivity
 import com.project.lembretio.R
@@ -128,8 +132,25 @@ class EventMany : Fragment() {
         }
 
         fun makeSize(size: Int) {
-            if (size<times.size) {
-                times = times.filterIndexed { i, _ -> i < size }.toMutableList()
+            if (size < times.size) {
+                times = times.filterIndexed { i, _ ->
+                    if (i >= size && (context as EventCreator).alarmId != 0) {
+                        // delete alarm if it exists
+                        val alarmIntent = Intent(context, AlarmReceiver::class.java)
+                        val pendingIntent = PendingIntent.getBroadcast(
+                            context,
+                            (context as EventCreator).alarmId + i,
+                            alarmIntent,
+                            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                        )
+                        val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                        pendingIntent?.let { _pendingIntent->
+                            alarmManager.cancel(_pendingIntent)
+                        }
+                    }
+                    i < size
+                }.toMutableList()
+
             } else {
                 for(i in 0 until size - times.size){
                     times.add("00:00")

@@ -69,4 +69,9 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         return true
     }
+
+    override fun onResume() {
+        super.onResume()
+        AlarmReceiver.ringtone?.stop()
+    }
 }

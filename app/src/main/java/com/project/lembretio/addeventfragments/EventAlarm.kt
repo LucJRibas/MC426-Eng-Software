@@ -1,6 +1,9 @@
 package com.project.lembretio.addeventfragments
 
 import android.app.Activity
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
@@ -13,6 +16,7 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
+import com.project.lembretio.AlarmReceiver
 import com.project.lembretio.Event
 import com.project.lembretio.EventCreator
 import com.project.lembretio.MainActivity
@@ -20,6 +24,7 @@ import com.project.lembretio.R
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoField
 
@@ -76,7 +81,7 @@ class EventAlarm : Fragment() {
         nextButton.setOnClickListener {
             val builder = (context as EventCreator)
             val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-            builder.addEvent(Event(
+            val newEvent = Event(
                 builder.name,
                 builder.repeating,
                 LocalDate.parse(builder.date, formatter),
@@ -84,7 +89,10 @@ class EventAlarm : Fragment() {
                 if (builder.alarmId == 0) Math.toIntExact(LocalDateTime.now().getLong(ChronoField.EPOCH_DAY)) else builder.alarmId,
                 uri,
                 if (builder.eventId == -1) 0 else builder.eventId
-            ))
+            )
+            scheduleAlarmForEvent(newEvent)
+            builder.addEvent(newEvent)
+
             val intentBack = Intent(context, MainActivity::class.java)
             startActivity(intentBack)
         }
@@ -93,5 +101,34 @@ class EventAlarm : Fragment() {
             viewPager?.currentItem = viewPager?.currentItem?.minus(1)!!
         }
         return layout
+    }
+
+    private fun scheduleAlarmForEvent(event: Event){
+
+        val alarmManager = activity?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val eventTimes = event.times.map { LocalDateTime.of(event.date, it) }
+
+        eventTimes.forEachIndexed { i, dateTime ->
+            val alarmIntent = Intent(context, AlarmReceiver::class.java)
+            alarmIntent.putExtra("title", event.name)
+            alarmIntent.putExtra("event_id", event.id)
+            alarmIntent.putExtra("date", dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")))
+            alarmIntent.putExtra("alarm_id", event.alarmId + i)
+            alarmIntent.putExtra("repeating", event.repeating)
+            alarmIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI, uri)
+
+            val dateToSend = if (dateTime.isBefore(LocalDateTime.now())) dateTime.plusDays(1) else dateTime
+
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                dateToSend.atZone(ZoneId.of("America/Sao_Paulo")).toInstant().toEpochMilli(),
+                PendingIntent.getBroadcast(
+                    context,
+                    event.alarmId + i,
+                    alarmIntent,
+                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                )
+            )
+        }
     }
 }
