@@ -19,6 +19,8 @@ import com.project.lembretio.MainActivity
 import com.project.lembretio.R
 import org.w3c.dom.Text
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
@@ -77,6 +79,13 @@ class EventDate : Fragment() {
 
         nextButton.setOnClickListener {
             if (date != null) {
+                if (!(context as EventCreator).isMedication) {
+                    val dateTime = LocalDateTime.of(date, LocalTime.parse((context as EventCreator).times[0]))
+                    if (dateTime.isBefore(LocalDateTime.now())) {
+                        Toast.makeText(context, "A consulta deve ser em uma data/horário futuros", Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
+                    }
+                }
                 (context as EventCreator).date = date!!.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
                 viewPager?.currentItem = viewPager?.currentItem?.plus(1)!!
             } else  {
@@ -94,12 +103,18 @@ class EventDate : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if ((context as EventCreator).repeating) {
-            titleText.text = "A partir de qual data você começará a tomar o medicamento?"
+        if ((context as EventCreator).isMedication) {
+            if ((context as EventCreator).repeating) {
+                titleText.text = "A partir de qual data você começará a tomar o medicamento?"
 
+            } else {
+                titleText.text = "Qual será o dia do medicamento?"
+
+            }
         } else {
-            titleText.text = "Qual será o dia do medicamento?"
+            titleText.text = "Qual a data da consulta?"
 
         }
+
     }
 }

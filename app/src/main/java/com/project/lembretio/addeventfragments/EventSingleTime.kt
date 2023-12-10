@@ -50,9 +50,8 @@ class EventSingleTime : Fragment() {
         (context as EventCreator).repeating = false
         if ((context as EventCreator).times.isEmpty()) {
             (context as EventCreator).times.add("00:00")
-        } else {
-            timeText.text = (context as EventCreator).times[0]
         }
+        timeText.text = (context as EventCreator).times[0]
 
         timeButton.setOnClickListener {
             val cal : Calendar = Calendar.getInstance()

@@ -14,6 +14,7 @@ interface EventCreator {
     var alarmId: Int
     var eventId: Int
     var uri: Uri?
+    var isMedication: Boolean
 
     fun addEvent(event: Event)
 }
@@ -30,13 +31,14 @@ class EventPagerActivity : AppCompatActivity(), EventCreator{
     override var alarmId: Int = 0
     override var eventId: Int = -1
     override var uri: Uri? = null
+    override var isMedication: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event_pager)
         val viewPager2 = findViewById<ViewPager2>(R.id.view_pager)
 
-        val isMedication = intent.getBooleanExtra("isMed", false)
+        isMedication = intent.getBooleanExtra("is_med", false)
 
         val adapter = if (isMedication) MedicationPagerAdapter(this) else AppointmentPagerAdapter(this)
         viewPager2.isUserInputEnabled = false
