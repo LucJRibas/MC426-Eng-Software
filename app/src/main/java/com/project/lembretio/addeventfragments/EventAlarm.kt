@@ -117,9 +117,11 @@ class EventAlarm : Fragment() {
             alarmIntent.putExtra("repeating", event.repeating)
             alarmIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI, uri)
 
+            val dateToSend = if (dateTime.isBefore(LocalDateTime.now())) dateTime.plusDays(1) else dateTime
+
             alarmManager.setExactAndAllowWhileIdle(
                 AlarmManager.RTC_WAKEUP,
-                dateTime.atZone(ZoneId.of("America/Sao_Paulo")).toInstant().toEpochMilli(),
+                dateToSend.atZone(ZoneId.of("America/Sao_Paulo")).toInstant().toEpochMilli(),
                 PendingIntent.getBroadcast(
                     context,
                     event.alarmId + i,

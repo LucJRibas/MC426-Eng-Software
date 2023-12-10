@@ -60,7 +60,6 @@ class EventDate : Fragment() {
                 val setDateListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
 
                     val tempDate = LocalDate.of(year, month + 1, dayOfMonth)
-                    Log.d("asdf", "$tempDate ${LocalDate.now()} -> ${tempDate.isBefore(LocalDate.now())}")
                     if (tempDate.isBefore(LocalDate.now())) {
                         Toast.makeText(context, "Por favor selecione uma data futura", Toast.LENGTH_SHORT).show()
                     } else {

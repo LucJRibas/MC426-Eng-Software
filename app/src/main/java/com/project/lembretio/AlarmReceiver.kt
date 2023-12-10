@@ -14,6 +14,7 @@ import android.media.Ringtone
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -113,8 +114,7 @@ class AlarmReceiver : BroadcastReceiver() {
     private fun rescheduleAlarm(context: Context, title: String?, date: String?, eventId: Int, alarmId: Int, uri: Uri?) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val newDate = LocalDateTime.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
-        newDate.plusDays(1)
+        val newDate = LocalDateTime.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")).plusDays(1)
 
         val alarmIntent = Intent(context, AlarmReceiver::class.java)
         alarmIntent.putExtra("title", title)
