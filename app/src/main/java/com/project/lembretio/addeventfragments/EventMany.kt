@@ -52,6 +52,8 @@ class EventMany : Fragment() {
 
         recycler.adapter = adapter
         populateSpinner()
+        spinner.setSelection(adapter.itemCount - 1)
+
         val viewPager: ViewPager2? = activity?.findViewById(R.id.view_pager)
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
@@ -77,11 +79,6 @@ class EventMany : Fragment() {
         val adapter: ArrayAdapter<Int>? =
             context?.let { ArrayAdapter<Int>(it, android.R.layout.simple_spinner_item, items) }
         spinner.adapter = adapter
-    }
-
-    companion object {
-        fun newInstance() =
-            EventMany()
     }
 
     private inner class ManyAdapter (
