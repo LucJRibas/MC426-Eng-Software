@@ -89,6 +89,7 @@ class EventAlarm : Fragment() {
             startActivity(intentBack)
         }
         prevButton.setOnClickListener {
+            (context as EventCreator).uri = uri
             viewPager?.currentItem = viewPager?.currentItem?.minus(1)!!
         }
         return layout

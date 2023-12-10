@@ -69,6 +69,7 @@ class EventMany : Fragment() {
             viewPager?.currentItem = viewPager?.currentItem?.plus(1)!!
         }
         prevButton.setOnClickListener {
+            (context as EventCreator).times = adapter.times
             viewPager?.currentItem = viewPager?.currentItem?.minus(1)!!
         }
         return layout

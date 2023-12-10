@@ -41,6 +41,7 @@ class EventFrequency : Fragment() {
 
         }
         prevButton.setOnClickListener {
+            (context as EventCreator).repeating = radioMany.isChecked
             viewPager?.currentItem = viewPager?.currentItem?.minus(1)!!
         }
         return layout

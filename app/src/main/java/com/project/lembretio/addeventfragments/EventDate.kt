@@ -58,12 +58,19 @@ class EventDate : Fragment() {
         dateButton.setOnClickListener {
             context?.let {
                 val setDateListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                    date = LocalDate.of(year, month + 1, dayOfMonth)
-                    dateText.text = date?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+
+                    val tempDate = LocalDate.of(year, month + 1, dayOfMonth)
+                    Log.d("asdf", "$tempDate ${LocalDate.now()} -> ${tempDate.isBefore(LocalDate.now())}")
+                    if (tempDate.isBefore(LocalDate.now())) {
+                        Toast.makeText(context, "Por favor selecione uma data futura", Toast.LENGTH_SHORT).show()
+                    } else {
+                        date = tempDate
+                        dateText.text = date?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                    }
                 }
 
                 val today = LocalDate.now()
-                val datePickerDialog = DatePickerDialog(it, setDateListener, today.year, today.monthValue, today.dayOfYear)
+                val datePickerDialog = DatePickerDialog(it, setDateListener, today.year-1, today.monthValue, today.dayOfYear)
                 datePickerDialog.setCancelable(false)
                 datePickerDialog.show()
             }
@@ -71,17 +78,16 @@ class EventDate : Fragment() {
 
         nextButton.setOnClickListener {
             if (date != null) {
-                if (date!!.isBefore(LocalDate.now())) {
-                    Toast.makeText(context, "Por favor selecione uma data futura", Toast.LENGTH_SHORT).show()
-                } else {
-                    (context as EventCreator).date = date!!.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                    viewPager?.currentItem = viewPager?.currentItem?.plus(1)!!
-                }
+                (context as EventCreator).date = date!!.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                viewPager?.currentItem = viewPager?.currentItem?.plus(1)!!
             } else  {
                 Toast.makeText(context, "Por favor selecione uma data", Toast.LENGTH_SHORT).show()
             }
         }
         prevButton.setOnClickListener {
+            if (date != null) {
+                (context as EventCreator).date = date!!.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+            }
             viewPager?.currentItem = viewPager?.currentItem?.minus(1)!!
         }
         return layout
