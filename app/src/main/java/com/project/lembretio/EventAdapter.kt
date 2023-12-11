@@ -48,13 +48,6 @@ class EventAdapter(
                 val intent = Intent(it.context, EventPagerActivity::class.java)
 
                 intent.putExtra("event", event)
-//                intent.putExtra("title", event.name)
-//                intent.putExtra("event_id", event.id)
-//                intent.putExtra("repeating", event.repeating)
-//                intent.putExtra("date", event.createdDateFormatted)
-//                intent.putExtra("times", event.times.joinToString(separator = " ") { time -> time.toString() })
-//                intent.putExtra("alarm_id", event.alarmId)
-//                intent.putExtra("uri", event.uri)
 
                 startActivity(it.context, intent, null)
             }
