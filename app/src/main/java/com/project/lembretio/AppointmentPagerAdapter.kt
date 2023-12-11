@@ -13,8 +13,8 @@ import com.project.lembretio.addeventfragments.EventTitle
 class AppointmentPagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            1 -> EventSingleTime()
-            2 -> EventDate()
+            1 -> EventDate()
+            2 -> EventSingleTime()
             3 -> EventAlarm()
             else -> EventTitle()
         }

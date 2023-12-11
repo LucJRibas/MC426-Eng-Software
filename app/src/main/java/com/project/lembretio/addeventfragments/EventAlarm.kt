@@ -36,6 +36,7 @@ class EventAlarm : Fragment() {
     private lateinit var alarmButton: Button
     private lateinit var alarmText: TextView
     private var uri: Uri? = null
+    private lateinit var eventCreator: EventCreator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +46,7 @@ class EventAlarm : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        eventCreator = context as EventCreator
         val layout = inflater.inflate(R.layout.fragment_event_alarm, container, false)
         nextButton = layout.findViewById(R.id.btn_title_next)
         prevButton = layout.findViewById(R.id.btn_title_prev)
@@ -53,8 +55,8 @@ class EventAlarm : Fragment() {
 
         val viewPager: ViewPager2? = activity?.findViewById(R.id.view_pager)
 
-        if ((context as EventCreator).uri != null) {
-            uri = (context as EventCreator).uri
+        if (eventCreator.event.uri != null) {
+            uri = eventCreator.event.uri
             val ringtone = RingtoneManager.getRingtone(context, uri)
             alarmText.text = ringtone.getTitle(context)
         }
@@ -79,16 +81,17 @@ class EventAlarm : Fragment() {
         }
 
         nextButton.setOnClickListener {
-            val builder = (context as EventCreator)
+            val builder = eventCreator
             val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
             val newEvent = Event(
-                builder.name,
-                builder.repeating,
-                LocalDate.parse(builder.date, formatter),
-                builder.times.map { LocalTime.parse(it) }.toMutableList(),
-                if (builder.alarmId == 0) Math.toIntExact(LocalDateTime.now().getLong(ChronoField.EPOCH_DAY)) else builder.alarmId,
+                builder.event.name,
+                builder.event.repeating,
+                builder.event.date,
+                builder.event.times,
+                if (builder.event.alarmId == 0) Math.toIntExact(LocalDateTime.now().getLong(ChronoField.EPOCH_DAY)) else builder.event.alarmId,
                 uri,
-                if (builder.eventId == -1) 0 else builder.eventId
+                builder.event.isMedication,
+                if (builder.event.id == -1) 0 else builder.event.id
             )
             scheduleAlarmForEvent(newEvent)
             builder.addEvent(newEvent)
@@ -97,7 +100,7 @@ class EventAlarm : Fragment() {
             startActivity(intentBack)
         }
         prevButton.setOnClickListener {
-            (context as EventCreator).uri = uri
+            eventCreator.event.uri = uri
             viewPager?.currentItem = viewPager?.currentItem?.minus(1)!!
         }
         return layout
@@ -110,11 +113,9 @@ class EventAlarm : Fragment() {
 
         eventTimes.forEachIndexed { i, dateTime ->
             val alarmIntent = Intent(context, AlarmReceiver::class.java)
-            alarmIntent.putExtra("title", event.name)
-            alarmIntent.putExtra("event_id", event.id)
+            alarmIntent.putExtra("event", event)
             alarmIntent.putExtra("date", dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")))
             alarmIntent.putExtra("alarm_id", event.alarmId + i)
-            alarmIntent.putExtra("repeating", event.repeating)
             alarmIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI, uri)
 
             val dateToSend = if (dateTime.isBefore(LocalDateTime.now())) dateTime.plusDays(1) else dateTime

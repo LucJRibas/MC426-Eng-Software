@@ -20,7 +20,8 @@ data class Event(
     @ColumnInfo(name = "times") var times: MutableList<LocalTime>,
     @ColumnInfo(name = "alarm_id") var alarmId: Int,
     @ColumnInfo(name = "uri") var uri: Uri?,
-    @PrimaryKey(autoGenerate = true) val id: Int = 0
+    @ColumnInfo(name = "is_med") var isMedication: Boolean,
+    @PrimaryKey(autoGenerate = true) var id: Int = 0
 ) : Parcelable {
 
     val createdDateFormatted : String

@@ -19,6 +19,8 @@ import com.project.lembretio.MainActivity
 import com.project.lembretio.R
 import org.w3c.dom.Text
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
@@ -29,6 +31,7 @@ class EventSingleTime : Fragment() {
     private lateinit var timeButton: Button
     private lateinit var timeText: TextView
     private lateinit var titleText: TextView
+    private lateinit var eventCreator: EventCreator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +41,7 @@ class EventSingleTime : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        eventCreator = context as EventCreator
         val layout = inflater.inflate(R.layout.fragment_event_single_time, container, false)
         nextButton = layout.findViewById(R.id.btn_title_next)
         prevButton = layout.findViewById(R.id.btn_title_prev)
@@ -47,11 +51,11 @@ class EventSingleTime : Fragment() {
 
         val viewPager: ViewPager2? = activity?.findViewById(R.id.view_pager)
 
-        (context as EventCreator).repeating = false
-        if ((context as EventCreator).times.isEmpty()) {
-            (context as EventCreator).times.add("00:00")
+        eventCreator.event.repeating = false
+        if (eventCreator.event.times.isEmpty()) {
+            eventCreator.event.times.add(LocalTime.of(0, 0))
         }
-        timeText.text = (context as EventCreator).times[0]
+        timeText.text = eventCreator.event.times[0].toString()
 
         timeButton.setOnClickListener {
             val cal : Calendar = Calendar.getInstance()
@@ -59,7 +63,7 @@ class EventSingleTime : Fragment() {
                     _, pickedHour, pickedMinute ->
                 val hour = String.format("%02d", pickedHour);
                 val minute = String.format("%02d", pickedMinute)
-                (context as EventCreator).times[0] =  "$hour:$minute"
+                eventCreator.event.times[0] = LocalTime.of(pickedHour, pickedMinute)
                 timeText.text = "$hour:$minute"
             }
             val timePickerDialog = TimePickerDialog(context,setTimeListener,cal.get(Calendar.HOUR_OF_DAY), cal.get(
@@ -77,6 +81,13 @@ class EventSingleTime : Fragment() {
 
 
         nextButton.setOnClickListener {
+            if (!eventCreator.event.isMedication) {
+                val dateTime = LocalDateTime.of(eventCreator.event.date, eventCreator.event.times[0])
+                if (dateTime.isBefore(LocalDateTime.now())) {
+                    Toast.makeText(context, "A consulta deve ser em uma data/horário futuros", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+            }
             viewPager?.currentItem = viewPager?.currentItem?.plus(1)!!
         }
         prevButton.setOnClickListener {

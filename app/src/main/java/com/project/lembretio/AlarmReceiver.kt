@@ -37,36 +37,34 @@ class AlarmReceiver : BroadcastReceiver() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun handleAlarmData(context: Context?, intent: Intent) {
         context?.let {
-            val title = intent.getStringExtra("title")
-            val eventId = intent.getIntExtra("event_id", -1)
+            val event = intent.getParcelableExtra<Event>("event")
             val date = intent.getStringExtra("date")
             val alarmId = intent.getIntExtra("alarm_id", 0)
-            val repeating = intent.getBooleanExtra("repeating", false)
-            val uri: Uri? = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
 
 
             createNotificationChannel(it)
-            playRingTone(it, uri)
-            if (repeating) rescheduleAlarm(it, title, date, eventId, alarmId, uri)
-            showNotification(it, title, date, eventId, alarmId, uri)
+            if (event != null) {
+                playRingTone(it, event.uri)
+                if (event.repeating) rescheduleAlarm(it, event, date, alarmId)
+                showNotification(it, event, date, alarmId)
+            }
         }
     }
 
-    private fun showNotification(context: Context, title: String?, date: String?, eventId: Int, alarmId: Int, uri: Uri?){
+    private fun showNotification(context: Context, event: Event, date: String?, alarmId: Int){
         //TODO ir para histórico -> Deletar evento?
         val eventIntent = Intent(context, MainActivity::class.java)
         eventIntent.component = ComponentName(context.packageName, MainActivity::class.java.name)
-        eventIntent.putExtra("title", title)
-        eventIntent.putExtra("event_id", eventId)
+        eventIntent.putExtra("event", event)
         eventIntent.putExtra("date", date)
         eventIntent.putExtra("alarm_id", alarmId)
 
         eventIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 
-        val text = if (uri == null) date else "$date Aperte nessa notificação para parar o alarme"
+        val text = if (event.uri == null) date else "$date Aperte nessa notificação para parar o alarme"
 
         val builder = NotificationCompat.Builder(context, "CHANNEL_ID")
-            .setContentTitle(title)
+            .setContentTitle(event.name)
             .setContentText(text)
             .setSmallIcon(R.drawable.ic_notification)
             .setAutoCancel(true)
@@ -111,18 +109,15 @@ class AlarmReceiver : BroadcastReceiver() {
 
     }
 
-    private fun rescheduleAlarm(context: Context, title: String?, date: String?, eventId: Int, alarmId: Int, uri: Uri?) {
+    private fun rescheduleAlarm(context: Context, event: Event, date: String?, alarmId: Int) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val newDate = LocalDateTime.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")).plusDays(1)
 
         val alarmIntent = Intent(context, AlarmReceiver::class.java)
-        alarmIntent.putExtra("title", title)
-        alarmIntent.putExtra("event_id", eventId)
+        alarmIntent.putExtra("event", event)
         alarmIntent.putExtra("date", newDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")))
         alarmIntent.putExtra("alarm_id", alarmId)
-        alarmIntent.putExtra("repeating", true)
-        alarmIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI, uri)
 
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,

@@ -31,6 +31,8 @@ class EventDate : Fragment() {
     private lateinit var dateButton: Button
     private lateinit var dateText: TextView
     private lateinit var titleText: TextView
+    private lateinit var eventCreator: EventCreator
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +42,7 @@ class EventDate : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        eventCreator = context as EventCreator
         val layout = inflater.inflate(R.layout.fragment_event_date, container, false)
         nextButton = layout.findViewById(R.id.btn_title_next)
         prevButton = layout.findViewById(R.id.btn_title_prev)
@@ -51,9 +54,9 @@ class EventDate : Fragment() {
 
         var date: LocalDate? = null
 
-        if ((context as EventCreator).date != "") {
-            date = LocalDate.parse((context as EventCreator).date, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-            dateText.text = (context as EventCreator).date
+        if (eventCreator.event.date != LocalDate.MAX) {
+            date = eventCreator.event.date
+            dateText.text = eventCreator.event.date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
 
         }
 
@@ -79,14 +82,7 @@ class EventDate : Fragment() {
 
         nextButton.setOnClickListener {
             if (date != null) {
-                if (!(context as EventCreator).isMedication) {
-                    val dateTime = LocalDateTime.of(date, LocalTime.parse((context as EventCreator).times[0]))
-                    if (dateTime.isBefore(LocalDateTime.now())) {
-                        Toast.makeText(context, "A consulta deve ser em uma data/horário futuros", Toast.LENGTH_SHORT).show()
-                        return@setOnClickListener
-                    }
-                }
-                (context as EventCreator).date = date!!.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                eventCreator.event.date = date!!
                 viewPager?.currentItem = viewPager?.currentItem?.plus(1)!!
             } else  {
                 Toast.makeText(context, "Por favor selecione uma data", Toast.LENGTH_SHORT).show()
@@ -94,7 +90,7 @@ class EventDate : Fragment() {
         }
         prevButton.setOnClickListener {
             if (date != null) {
-                (context as EventCreator).date = date!!.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                eventCreator.event.date = date!!
             }
             viewPager?.currentItem = viewPager?.currentItem?.minus(1)!!
         }
@@ -103,8 +99,8 @@ class EventDate : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if ((context as EventCreator).isMedication) {
-            if ((context as EventCreator).repeating) {
+        if (eventCreator.event.isMedication) {
+            if (eventCreator.event.repeating) {
                 titleText.text = "A partir de qual data você começará a tomar o medicamento?"
 
             } else {

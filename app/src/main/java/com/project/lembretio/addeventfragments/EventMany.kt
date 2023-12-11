@@ -26,6 +26,7 @@ import com.project.lembretio.AlarmReceiver
 import com.project.lembretio.EventCreator
 import com.project.lembretio.MainActivity
 import com.project.lembretio.R
+import java.time.LocalTime
 import java.util.Calendar
 
 
@@ -35,6 +36,8 @@ class EventMany : Fragment() {
     private lateinit var prevButton: Button
     private lateinit var spinner: Spinner
     private lateinit var recycler: RecyclerView
+    private lateinit var eventCreator: EventCreator
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +47,7 @@ class EventMany : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        eventCreator = context as EventCreator
         val layout = inflater.inflate(R.layout.fragment_event_many, container, false)
         nextButton = layout.findViewById(R.id.btn_many_next)
         prevButton = layout.findViewById(R.id.btn_many_prev)
@@ -51,8 +55,8 @@ class EventMany : Fragment() {
         recycler = layout.findViewById(R.id.recycler_many)
         recycler.layoutManager = LinearLayoutManager(context)
 
-        if ((context as EventCreator).times.isEmpty()) (context as EventCreator).times.add("00:00")
-        val adapter = ManyAdapter((context as EventCreator).times)
+        if (eventCreator.event.times.isEmpty()) eventCreator.event.times.add(LocalTime.of(0, 0))
+        val adapter = ManyAdapter(eventCreator.event.times.map { it.toString() }.toMutableList())
 
         recycler.adapter = adapter
         populateSpinner()
@@ -69,11 +73,11 @@ class EventMany : Fragment() {
             }
         }
         nextButton.setOnClickListener {
-            (context as EventCreator).times = adapter.times
+            eventCreator.event.times = adapter.times.map { LocalTime.parse(it) }.toMutableList()
             viewPager?.currentItem = viewPager?.currentItem?.plus(1)!!
         }
         prevButton.setOnClickListener {
-            (context as EventCreator).times = adapter.times
+            eventCreator.event.times = adapter.times.map { LocalTime.parse(it) }.toMutableList()
             viewPager?.currentItem = viewPager?.currentItem?.minus(1)!!
         }
         return layout
@@ -134,12 +138,12 @@ class EventMany : Fragment() {
         fun makeSize(size: Int) {
             if (size < times.size) {
                 times = times.filterIndexed { i, _ ->
-                    if (i >= size && (context as EventCreator).alarmId != 0) {
+                    if (i >= size && eventCreator.event.alarmId != 0) {
                         // delete alarm if it exists
                         val alarmIntent = Intent(context, AlarmReceiver::class.java)
                         val pendingIntent = PendingIntent.getBroadcast(
                             context,
-                            (context as EventCreator).alarmId + i,
+                            eventCreator.event.alarmId + i,
                             alarmIntent,
                             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
                         )

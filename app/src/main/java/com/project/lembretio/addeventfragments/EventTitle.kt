@@ -24,6 +24,8 @@ class EventTitle : Fragment() {
     private lateinit var prevButton: Button
     private lateinit var editText: EditText
     private lateinit var titleText: TextView
+    private lateinit var eventCreator: EventCreator
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +35,7 @@ class EventTitle : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        eventCreator = context as EventCreator
         val layout = inflater.inflate(R.layout.fragment_event_title, container, false)
         nextButton = layout.findViewById(R.id.btn_title_next)
         prevButton = layout.findViewById(R.id.btn_title_prev)
@@ -40,12 +43,12 @@ class EventTitle : Fragment() {
         titleText = layout.findViewById(R.id.event_title_text)
 
 
-        editText.setText((context as EventCreator).name)
+        editText.setText(eventCreator.event.name)
 
         val viewPager: ViewPager2? = activity?.findViewById(R.id.view_pager)
         nextButton.setOnClickListener {
             if (editText.text.toString() == "") {
-                if ((context as EventCreator).isMedication) {
+                if (eventCreator.event.isMedication) {
                     Toast.makeText(
                         context,
                         "Por favor coloque um nome de remédio",
@@ -59,7 +62,7 @@ class EventTitle : Fragment() {
                     ).show()
                 }
             } else {
-                (context as EventCreator).name = editText.text.toString()
+                eventCreator.event.name = editText.text.toString()
 
                 val imm = activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
                 var view = activity?.currentFocus
@@ -80,7 +83,7 @@ class EventTitle : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if ((context as EventCreator).isMedication) {
+        if (eventCreator.event.isMedication) {
             titleText.text = "Qual é o remédio que você precisa tomar?"
             editText.hint = "Digite o nome dele aqui!"
 
