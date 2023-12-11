@@ -3,24 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/lightblue"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/tbEvent"
+        android:id="@+id/toolbar"
+        app:title="Lembretio"
+        app:titleTextColor="@color/black"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:layout_gravity="top"
-        android:background="?attr/colorPrimary"
+        android:background="@color/material_dynamic_primary60"
         android:elevation="4dp"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:title="Lembretio"
-        app:titleMargin="20dp" />
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:background="@color/lightblue"
+        style="@style/SCREEN"
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
@@ -35,14 +33,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/cardwhite"
-                android:orientation="vertical"
-                app:backgroundTint="@null">
+                android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/rvEventActivityTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Add Event Here..."
+                    android:textColor="@color/black"
                     android:textSize="30dp"
                     android:textStyle="bold"
                     android:layout_margin="10dp"/>
@@ -54,11 +52,12 @@
 
                     <Button
                         android:id="@+id/btnSaveDate"
+                        style="@style/BUTTON"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:layout_weight="0.7"
-                        android:text="Set Date" />
+                        android:text="Set Date"/>
 
                 </LinearLayout>
 
@@ -80,6 +79,7 @@
                     android:orientation="horizontal">
                     <Button
                         android:id="@+id/btnCancel"
+                        style="@style/BUTTON"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
@@ -90,6 +90,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
+                        style="@style/BUTTON"
                         android:layout_weight="0.7"
                         android:text="Save" />
 

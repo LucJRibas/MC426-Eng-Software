@@ -39,6 +39,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     private lateinit var setDateButton: Button
     private lateinit var newEvent: Event
 
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
