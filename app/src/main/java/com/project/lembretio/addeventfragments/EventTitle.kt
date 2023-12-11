@@ -45,7 +45,19 @@ class EventTitle : Fragment() {
         val viewPager: ViewPager2? = activity?.findViewById(R.id.view_pager)
         nextButton.setOnClickListener {
             if (editText.text.toString() == "") {
-                Toast.makeText(context, "Por favor coloque um nome de remédio", Toast.LENGTH_SHORT).show()
+                if ((context as EventCreator).isMedication) {
+                    Toast.makeText(
+                        context,
+                        "Por favor coloque um nome de remédio",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        context,
+                        "Por favor coloque o nome da consulta",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             } else {
                 (context as EventCreator).name = editText.text.toString()
 

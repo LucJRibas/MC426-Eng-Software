@@ -70,6 +70,13 @@ class MainActivity : AppCompatActivity() {
         
         binding.btnCreateMedicine.setOnClickListener {
             val intent = Intent(applicationContext, EventPagerActivity::class.java)
+            intent.putExtra("is_med", true)
+            startActivity(intent)
+        }
+
+        binding.btnCreateAppoint.setOnClickListener {
+            val intent = Intent(applicationContext, EventPagerActivity::class.java)
+            intent.putExtra("is_med", false)
             startActivity(intent)
         }
 
