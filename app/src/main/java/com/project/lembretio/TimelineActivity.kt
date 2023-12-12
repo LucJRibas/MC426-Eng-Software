@@ -3,9 +3,9 @@ package com.project.lembretio
 
 
 import android.os.Bundle
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 
 class TimelineActivity : AppCompatActivity() {
 
@@ -19,7 +19,7 @@ class TimelineActivity : AppCompatActivity() {
         // Receba o evento da Intent
         val receivedEvent: Event? = intent.getParcelableExtra("event")
 
-        val button = findViewById<LinearLayout>(R.id.llEventInfo)
+        val button = findViewById<ConstraintLayout>(R.id.llEventInfo)
         val titleText = findViewById<TextView>(R.id.remedio)
         val dateinit = findViewById<TextView>(R.id.inicio)
         val timing = findViewById<TextView>(R.id.timing)

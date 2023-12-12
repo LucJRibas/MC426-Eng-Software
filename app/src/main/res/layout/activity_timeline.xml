@@ -22,7 +22,6 @@
         app:layout_constraintStart_toStartOf="parent" />
 
 
-
     <Button
         android:id="@+id/btn_time_edit"
         android:layout_width="0dp"
@@ -35,7 +34,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/btn_time_prev" />
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/llEventInfo"
         android:layout_width="323dp"
         android:layout_height="536dp"
@@ -44,57 +43,86 @@
         android:clickable="true"
         android:focusable="true"
         android:gravity="start|center_vertical"
-        android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/btn_time_prev"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.384">>
-        <TextView
-            android:id="@+id/timing"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TIMING"
-            android:textColor="@color/cardwhite"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+        app:layout_constraintVertical_bias="0.384"><![CDATA[>
 
-        <TextView
-            android:id="@+id/inicio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="INICIO"
-            android:textColor="@color/cardwhite"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+
+
+        ]]>
 
         <TextView
             android:id="@+id/remedio"
-            android:layout_width="match_parent"
+            android:layout_width="323dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="8sp"
             android:text="REMEDIO"
             android:textColor="@color/cardwhite"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/alarme"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="322dp"
             android:layout_height="wrap_content"
-            android:text="ALARME"
-            android:textColor="@color/cardwhite"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.502">
 
-        <TextView
-            android:id="@+id/progresso"
-            android:layout_width="205dp"
-            android:layout_height="71dp"
-            android:text="PROGRESSO"
-            android:textColor="@color/cardwhite"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/timing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:text="TIMING"
+                android:textColor="@color/cardwhite"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/alarme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:text="ALARME"
+                android:textColor="@color/cardwhite"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/inicio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:text="INICIO"
+                android:textColor="@color/cardwhite"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/progresso"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:text="PROGRESSO"
+                android:textColor="@color/cardwhite"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
