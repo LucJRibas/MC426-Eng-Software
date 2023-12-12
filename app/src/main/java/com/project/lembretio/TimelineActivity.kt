@@ -23,6 +23,7 @@ class TimelineActivity : AppCompatActivity() {
         EventModelFactory((application as EventApplication).repository)
     }
     private fun countDoses(event: Event): Int {
+        // TODO
         return 0
     }
 
@@ -108,10 +109,19 @@ class TimelineActivity : AppCompatActivity() {
             progresso.text = "Doses tomadas: ${countDoses(receivedEvent)}"
         }
 
+        if (receivedEvent.uri == null) {
+            layout.removeView(alarme)
+        }
+        else {
+            alarme.text = "Alarme (TO DO)"
+        }
+
         if (!receivedEvent.isMedication) {
             val outerLayout = findViewById<ConstraintLayout>(R.id.event_ConstraintLayout)
             outerLayout.setBackgroundColor(Color.parseColor("#a3507b"))
         }
+
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
