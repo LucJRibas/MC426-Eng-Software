@@ -2,15 +2,22 @@ package com.project.lembretio
 
 
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 
 class TimelineActivity : AppCompatActivity() {
-
+    private val eventViewModel: EventViewModel by viewModels {
+        EventModelFactory((application as EventApplication).repository)
+    }
     private fun countDoses(event: Event): Int {
         return 0
     }
@@ -42,10 +49,40 @@ class TimelineActivity : AppCompatActivity() {
             }
         }
 
-       btn_prev.setOnClickListener {
+        btn_edit.setOnClickListener {
+            val intentEdit = Intent(applicationContext, EventPagerActivity::class.java)
+            intentEdit.putExtra("event", receivedEvent)
+            startActivity(intentEdit)
+        }
+
+        if (receivedEvent != null) {
+            btn_del.setOnClickListener {
+                val alarmIntent = Intent(applicationContext, AlarmReceiver::class.java)
+                val pendingIntent = PendingIntent.getBroadcast(
+                    applicationContext,
+                    receivedEvent.alarmId,
+                    alarmIntent,
+                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                )
+                val alarmManager = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                pendingIntent?.let { _pendingIntent ->
+                    alarmManager.cancel(_pendingIntent)
+                }
+
+                eventViewModel.deleteEvent(receivedEvent)
+
+
+                Toast.makeText(applicationContext, "Evento ${receivedEvent.name} excluído", Toast.LENGTH_SHORT).show()
+                val intentBack = Intent(applicationContext, MainActivity::class.java)
+                startActivity(intentBack)
+            }
+        }
+
+        btn_prev.setOnClickListener {
             val intentBack = Intent(applicationContext, MainActivity::class.java)
             startActivity(intentBack)
         }
+
 
     }
 }
