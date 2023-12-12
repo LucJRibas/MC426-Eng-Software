@@ -99,7 +99,6 @@ class TimelineActivity : AppCompatActivity() {
             dateinit.text = "Data de início: ${receivedEvent.createdDateFormatted}"
         } else {
             dateinit.text = "Data da consulta: ${receivedEvent.createdDateFormatted}"
-            timing.text = "Horário: ${receivedEvent.times.joinToString(separator = ", ") { it.toString() }}"
             layout.removeView(progresso)
         }
 
@@ -107,6 +106,9 @@ class TimelineActivity : AppCompatActivity() {
         if (receivedEvent.repeating) {
             timing.text = "Horários do dia: ${receivedEvent.times.joinToString(separator = ", ") { it.toString() }}"
             progresso.text = "Doses tomadas: ${countDoses(receivedEvent)}"
+        } else {
+            timing.text = "Horário: ${receivedEvent.times.joinToString(separator = ", ") { it.toString() }}"
+            layout.removeView(progresso)
         }
 
         if (receivedEvent.uri == null) {
