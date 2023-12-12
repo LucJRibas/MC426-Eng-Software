@@ -46,22 +46,6 @@ class EventAdapter(
 
                 startActivity(it.context, intent, null)
             }
-
-            val removeButton = findViewById<TextView>(R.id.btnRemove)
-            removeButton.setOnClickListener {
-//                val alarmIntent = Intent(context, AlarmReceiver::class.java)
-//                val pendingIntent = PendingIntent.getBroadcast(
-//                    context,
-//                    event.alarmId,
-//                    alarmIntent,
-//                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-//                )
-//                val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//                pendingIntent?.let { _pendingIntent->
-//                    alarmManager.cancel(_pendingIntent)
-//                }
-                eventViewModel.deleteEvent(event)
-            }
         }
     }
 
