@@ -55,8 +55,7 @@ class CountDosesTest {
         val currentDateTime = LocalDateTime.now()
         val currentDate = LocalDate.now()
         val oneMinuteBefore = hour_min_formmater.format(currentDateTime.minus(1, ChronoUnit.MINUTES))
-        val twoMinutesBefore = hour_min_formmater.format(currentDateTime.minus(1, ChronoUnit.MINUTES))
-        val event = createEvent(currentDate.minusDays(5), listOf(oneMinuteBefore, twoMinutesBefore))
+        val event = createEvent(currentDate.minusDays(5), listOf(oneMinuteBefore))
         assertEquals(6, countDoses(event))
     }
 
@@ -65,7 +64,8 @@ class CountDosesTest {
         val currentDateTime = LocalDateTime.now()
         val currentDate = LocalDate.now()
         val oneMinuteBefore = hour_min_formmater.format(currentDateTime.minus(1, ChronoUnit.MINUTES))
-        val event = createEvent(currentDate.minusDays(1), listOf(oneMinuteBefore))
+        val twoMinutesBefore = hour_min_formmater.format(currentDateTime.minus(2, ChronoUnit.MINUTES))
+        val event = createEvent(currentDate.minusDays(1), listOf(oneMinuteBefore, twoMinutesBefore))
         assertEquals(4, countDoses(event))
     }
 }
