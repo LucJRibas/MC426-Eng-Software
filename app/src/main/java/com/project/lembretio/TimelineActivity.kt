@@ -91,7 +91,13 @@ class TimelineActivity : AppCompatActivity() {
         val alarme = findViewById<TextView>(R.id.alarme)
 
         titleText.text = receivedEvent.name
-        dateinit.text = "Data de início: ${receivedEvent.createdDateFormatted}"
+        if (receivedEvent.isMedication) {
+            dateinit.text = "Data de início: ${receivedEvent.createdDateFormatted}"
+        } else {
+            dateinit.text = "Data da consulta: ${receivedEvent.createdDateFormatted}"
+            timing.text = "Horário: ${receivedEvent.times.joinToString(separator = ", ") { it.toString() }}"
+        }
+
 
         if (receivedEvent.repeating) {
             timing.text = "Horários do dia: ${receivedEvent.times.joinToString(separator = ", ") { it.toString() }}"
