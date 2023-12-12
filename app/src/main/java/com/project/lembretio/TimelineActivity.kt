@@ -18,15 +18,13 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.project.lembretio.utils.countDoses
 
 class TimelineActivity : AppCompatActivity() {
     private val eventViewModel: EventViewModel by viewModels {
         EventModelFactory((application as EventApplication).repository)
     }
-    private fun countDoses(event: Event): Int {
-        // TODO
-        return 0
-    }
+
 
     private fun deleteEvent(event: Event) {
         event.times.forEachIndexed { i, dateTime ->
