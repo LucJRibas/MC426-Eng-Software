@@ -10,6 +10,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -84,6 +85,7 @@ class TimelineActivity : AppCompatActivity() {
     }
 
     private fun configureTexts(receivedEvent: Event){
+        val layout = findViewById<LinearLayout>(R.id.info_LinearLayout)
         val titleText = findViewById<TextView>(R.id.remedio)
         val dateinit = findViewById<TextView>(R.id.inicio)
         val timing = findViewById<TextView>(R.id.timing)
@@ -96,6 +98,7 @@ class TimelineActivity : AppCompatActivity() {
         } else {
             dateinit.text = "Data da consulta: ${receivedEvent.createdDateFormatted}"
             timing.text = "Horário: ${receivedEvent.times.joinToString(separator = ", ") { it.toString() }}"
+            layout.removeView(progresso)
         }
 
 
