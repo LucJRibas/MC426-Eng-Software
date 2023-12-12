@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
+import android.media.RingtoneManager
 import android.os.Bundle
 import android.widget.Button
 import android.widget.LinearLayout
@@ -28,21 +29,22 @@ class TimelineActivity : AppCompatActivity() {
     }
 
     private fun deleteEvent(event: Event) {
-
-        val alarmIntent = Intent(applicationContext, AlarmReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(
-            applicationContext,
-            event.alarmId,
-            alarmIntent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
-        val alarmManager = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        pendingIntent?.let { _pendingIntent ->
-            alarmManager.cancel(_pendingIntent)
+        event.times.forEachIndexed { i, dateTime ->
+            val alarmIntent = Intent(applicationContext, AlarmReceiver::class.java)
+            val pendingIntent = PendingIntent.getBroadcast(
+                applicationContext,
+                event.alarmId + i,
+                alarmIntent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+            val alarmManager =
+                applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            pendingIntent?.let { _pendingIntent ->
+                alarmManager.cancel(_pendingIntent)
+            }
         }
 
         eventViewModel.deleteEvent(event)
-
 
         Toast.makeText(applicationContext, "Evento ${event.name} excluído", Toast.LENGTH_SHORT).show()
         val intentBack = Intent(applicationContext, MainActivity::class.java)
@@ -115,8 +117,8 @@ class TimelineActivity : AppCompatActivity() {
             layout.removeView(alarme)
         }
         else {
-            // TODO
-            alarme.text = "Alarme (TO DO)"
+            val ringtone = RingtoneManager.getRingtone(applicationContext, receivedEvent.uri)
+            alarme.text = "Alarme: ${ringtone.getTitle(applicationContext)}"
         }
 
         if (!receivedEvent.isMedication) {
