@@ -8,6 +8,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
 import android.widget.LinearLayout
@@ -106,6 +107,11 @@ class TimelineActivity : AppCompatActivity() {
             timing.text = "Horários do dia: ${receivedEvent.times.joinToString(separator = ", ") { it.toString() }}"
             progresso.text = "Doses tomadas: ${countDoses(receivedEvent)}"
         }
+
+        if (!receivedEvent.isMedication) {
+            val outerLayout = findViewById<ConstraintLayout>(R.id.event_ConstraintLayout)
+            outerLayout.setBackgroundColor(Color.parseColor("#a3507b"))
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -118,5 +124,7 @@ class TimelineActivity : AppCompatActivity() {
             configureTexts(receivedEvent)
             configureButtons(receivedEvent)
         }
+
+
     }
 }
