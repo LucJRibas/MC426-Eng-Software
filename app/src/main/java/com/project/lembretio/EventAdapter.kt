@@ -45,8 +45,7 @@ class EventAdapter(
                 dateText.text = "${event.createdDateFormatted}: ${event.times.joinToString(separator = ", ") { it.toString() }}"
             }
             button.setOnClickListener {
-                //val intent = Intent(it.context, TimelineActivity::class.java)
-                val intent = Intent(it.context, EventPagerActivity::class.java)
+                val intent = Intent(it.context, TimelineActivity::class.java)
 
                 intent.putExtra("event", event)
 
