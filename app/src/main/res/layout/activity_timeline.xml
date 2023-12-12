@@ -5,19 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_alignParentBottom="false"
+    android:background="@color/lightblue"
     android:orientation="vertical"
     tools:context=".addeventfragments.EventWeek">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/event_ConstraintLayout"
-        android:layout_width="323dp"
-        android:layout_height="450dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:layout_weight="82"
         android:background="#6750A3"
         android:clickable="true"
         android:focusable="true"
         android:gravity="start|center_vertical"
+        app:cornerRadius="10dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,6 +49,7 @@
             android:id="@+id/info_LinearLayout"
             android:layout_width="322dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -59,7 +66,8 @@
                 android:text="INICIO"
                 android:textColor="@color/cardwhite"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
 
             <TextView
                 android:id="@+id/timing"
@@ -70,7 +78,8 @@
                 android:text="TIMING"
                 android:textColor="@color/cardwhite"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
 
             <TextView
                 android:id="@+id/progresso"
@@ -81,7 +90,8 @@
                 android:text="PROGRESSO"
                 android:textColor="@color/cardwhite"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
 
             <TextView
                 android:id="@+id/alarme"

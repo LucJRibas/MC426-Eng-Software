@@ -115,6 +115,7 @@ class TimelineActivity : AppCompatActivity() {
             layout.removeView(alarme)
         }
         else {
+            // TODO
             alarme.text = "Alarme (TO DO)"
         }
 
