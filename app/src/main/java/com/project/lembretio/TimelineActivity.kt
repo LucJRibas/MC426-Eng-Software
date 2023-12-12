@@ -8,6 +8,10 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 class TimelineActivity : AppCompatActivity() {
+
+    private fun countDoses(event: Event): Int {
+        return 0
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_timeline)
@@ -28,6 +32,7 @@ class TimelineActivity : AppCompatActivity() {
 
             if (receivedEvent.repeating) {
                 timing.text = "Horários do dia: ${receivedEvent.times.joinToString(separator = ", ") { it.toString() }}"
+                progresso.text = "Doses tomadas: ${countDoses(receivedEvent)}"
             }
         }
 
