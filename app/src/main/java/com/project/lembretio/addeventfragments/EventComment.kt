@@ -52,6 +52,12 @@ class EventComment : Fragment() {
 
         val viewPager: ViewPager2? = activity?.findViewById(R.id.view_pager)
         nextButton.setOnClickListener {
+            val imm = activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            var view = activity?.currentFocus
+            if (view == null) {
+                view = View(activity)
+            }
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
             viewPager?.currentItem = viewPager?.currentItem?.plus(1)!!
         }
         prevButton.setOnClickListener {

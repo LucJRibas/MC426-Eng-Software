@@ -53,11 +53,9 @@ class AlarmReceiver : BroadcastReceiver() {
 
     private fun showNotification(context: Context, event: Event, date: String?, alarmId: Int){
         //TODO ir para histórico -> Deletar evento?
-        val eventIntent = Intent(context, MainActivity::class.java)
-        eventIntent.component = ComponentName(context.packageName, MainActivity::class.java.name)
+        val eventIntent = Intent(context, TimelineActivity::class.java)
+        eventIntent.component = ComponentName(context.packageName, TimelineActivity::class.java.name)
         eventIntent.putExtra("event", event)
-        eventIntent.putExtra("date", date)
-        eventIntent.putExtra("alarm_id", alarmId)
 
         eventIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 
