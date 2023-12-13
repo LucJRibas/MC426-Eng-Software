@@ -36,7 +36,6 @@ data class Event(
 
     fun countDoses() : Long{
 
-        val firstDay = date
         val today = LocalDate.now()
         val dosesPerDay = times.size
         var dosesTaken = 0L

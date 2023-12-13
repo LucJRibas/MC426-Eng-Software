@@ -87,7 +87,7 @@ class EventAlarm : Fragment() {
                 builder.event.name,
                 builder.event.repeating,
                 builder.event.date,
-                builder.event.time,
+                LocalTime.now(),
                 builder.event.times,
                 if (builder.event.alarmId == 0) Math.toIntExact(LocalDateTime.now().getLong(ChronoField.EPOCH_DAY)) else builder.event.alarmId,
                 uri,
