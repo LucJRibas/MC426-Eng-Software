@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         eventViewModel.events.observe(this){
             binding.rvEventActivity.apply {
                 layoutManager = LinearLayoutManager(applicationContext)
-                binding.rvEventActivity.adapter = EventAdapter(it, eventViewModel)
+                binding.rvEventActivity.adapter = EventAdapter(it.sortedBy { it.date  }, eventViewModel)
             }
         }
 
