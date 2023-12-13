@@ -20,7 +20,8 @@ class CountDosesTest {
             times = parsedTimes.toMutableList(),
             alarmId = 1,
             uri = null,
-            isMedication = true
+            isMedication = true,
+            comment = "Comentario"
         )
     }
     @Test
@@ -37,6 +38,23 @@ class CountDosesTest {
         val oneMinuteAfter = hour_min_formmater.format(currentDateTime.plus(1, ChronoUnit.MINUTES))
         val event = createEvent(currentDateTime, listOf(oneMinuteAfter))
         assertEquals(0, event.countDoses())
+    }
+
+
+    @Test
+    fun `event created after time should return 0`() {
+        val currentDateTime = LocalDateTime.now()
+        val oneMinuteBefore = hour_min_formmater.format(currentDateTime.minus(1, ChronoUnit.MINUTES))
+        val event = createEvent(currentDateTime, listOf(oneMinuteBefore))
+        assertEquals(0, event.countDoses())
+    }
+
+    @Test
+    fun `event created after time on day before should return 1`() {
+        val currentDateTime = LocalDateTime.now()
+        val oneMinuteBefore = hour_min_formmater.format(currentDateTime.minus(1, ChronoUnit.MINUTES))
+        val event = createEvent(currentDateTime.minusDays(1), listOf(oneMinuteBefore))
+        assertEquals(1, event.countDoses())
     }
 
     @Test
