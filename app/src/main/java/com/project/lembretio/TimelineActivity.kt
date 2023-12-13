@@ -18,7 +18,6 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.project.lembretio.utils.countDoses
 
 class TimelineActivity : AppCompatActivity() {
     private val eventViewModel: EventViewModel by viewModels {
@@ -105,7 +104,7 @@ class TimelineActivity : AppCompatActivity() {
 
         if (receivedEvent.repeating) {
             timing.text = "Horários do dia: ${receivedEvent.times.joinToString(separator = ", ") { it.toString() }}"
-            progresso.text = "Doses tomadas: ${countDoses(receivedEvent)}"
+            progresso.text = "Doses tomadas: ${receivedEvent.countDoses()}"
         } else {
             timing.text = "Horário: ${receivedEvent.times.joinToString(separator = ", ") { it.toString() }}"
             layout.removeView(progresso)

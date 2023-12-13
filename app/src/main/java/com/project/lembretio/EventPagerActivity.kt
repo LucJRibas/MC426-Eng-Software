@@ -6,6 +6,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import java.time.LocalDate
+import java.time.LocalTime
 
 interface EventCreator {
     var event: Event
@@ -18,7 +19,8 @@ class EventPagerActivity : AppCompatActivity(), EventCreator{
         EventModelFactory((application as EventApplication).repository)
     }
 
-    override var event: Event = Event("", false, LocalDate.MAX, mutableListOf(), 0, null, false, -1)
+    override var event: Event = Event("", false, LocalDate.MAX,
+        LocalTime.MAX, mutableListOf(), 0, null, false, -1)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
