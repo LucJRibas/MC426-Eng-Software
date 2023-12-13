@@ -95,4 +95,21 @@ dependencies {
     androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.2")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.2")
 
+    // Para Espresso
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.4.0")
+
+// Para Truth
+    androidTestImplementation("com.google.truth:truth:1.1.3")
+
+// Para testes de fragmento
+    androidTestImplementation("androidx.fragment:fragment-testing:1.4.0")
+// Para Mockito
+    testImplementation("org.mockito:mockito-core:3.11.2")
+    testImplementation("org.mockito:mockito-android:3.11.2")
+
+    implementation("org.checkerframework:checker:3.13.0")
+    implementation("org.checkerframework:checker-qual:3.13.0")
+
+    implementation("androidx.fragment:fragment-testing:1.6.2")
 }
