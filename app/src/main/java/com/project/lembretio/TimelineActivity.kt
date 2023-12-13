@@ -88,35 +88,36 @@ class TimelineActivity : AppCompatActivity() {
     private fun configureTexts(receivedEvent: Event){
         val layout = findViewById<LinearLayout>(R.id.info_LinearLayout)
         val titleText = findViewById<TextView>(R.id.remedio)
-        val dateinit = findViewById<TextView>(R.id.inicio)
+        val dateInit = findViewById<TextView>(R.id.inicio)
         val timing = findViewById<TextView>(R.id.timing)
-        val progresso = findViewById<TextView>(R.id.progresso)
-        val alarme = findViewById<TextView>(R.id.alarme)
+        val progress = findViewById<TextView>(R.id.progresso)
+        val alarm = findViewById<TextView>(R.id.alarme)
+        val comment = findViewById<TextView>(R.id.comment)
 
         titleText.text = receivedEvent.name
         if (receivedEvent.isMedication) {
-            dateinit.text = "Data de início: ${receivedEvent.createdDateFormatted}"
+            dateInit.text = "Data de início: ${receivedEvent.createdDateFormatted}"
         } else {
-            dateinit.text = "Data da consulta: ${receivedEvent.createdDateFormatted}"
-            layout.removeView(progresso)
+            dateInit.text = "Data da consulta: ${receivedEvent.createdDateFormatted}"
+            layout.removeView(progress)
         }
 
 
         if (receivedEvent.repeating) {
             timing.text = "Horários do dia: ${receivedEvent.times.joinToString(separator = ", ") { it.toString() }}"
-            progresso.text = "Doses tomadas: ${receivedEvent.countDoses()}"
+            progress.text = "Doses tomadas: ${receivedEvent.countDoses()}"
         } else {
             timing.text = "Horário: ${receivedEvent.times.joinToString(separator = ", ") { it.toString() }}"
-            layout.removeView(progresso)
+            layout.removeView(progress)
         }
 
         if (receivedEvent.uri == null) {
-            layout.removeView(alarme)
-        }
-        else {
+            layout.removeView(alarm)
+        } else {
             val ringtone = RingtoneManager.getRingtone(applicationContext, receivedEvent.uri)
-            alarme.text = "Alarme: ${ringtone.getTitle(applicationContext)}"
+            alarm.text = "Alarme: ${ringtone.getTitle(applicationContext)}"
         }
+        comment.text = "Comentários:\n${receivedEvent.comment}"
 
         if (!receivedEvent.isMedication) {
             val outerLayout = findViewById<ConstraintLayout>(R.id.event_ConstraintLayout)

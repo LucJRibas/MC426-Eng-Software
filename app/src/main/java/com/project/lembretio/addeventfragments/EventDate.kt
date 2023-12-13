@@ -23,6 +23,7 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
+import kotlin.concurrent.timer
 
 class EventDate : Fragment() {
 
@@ -83,6 +84,14 @@ class EventDate : Fragment() {
         nextButton.setOnClickListener {
             if (date != null) {
                 eventCreator.event.date = date!!
+                if (!eventCreator.event.repeating) {
+                    if (eventCreator.event.times.any { LocalDateTime.of(eventCreator.event.date, it).isBefore(LocalDateTime.now()) }) {
+                        Toast.makeText(context, "O rémedio só pode ser tomado em uma data/horário futuros", Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
+                    }
+
+
+                }
                 viewPager?.currentItem = viewPager?.currentItem?.plus(1)!!
             } else  {
                 Toast.makeText(context, "Por favor selecione uma data", Toast.LENGTH_SHORT).show()

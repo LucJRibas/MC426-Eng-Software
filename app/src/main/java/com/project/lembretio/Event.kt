@@ -23,6 +23,7 @@ data class Event(
     @ColumnInfo(name = "alarm_id") var alarmId: Int,
     @ColumnInfo(name = "uri") var uri: Uri?,
     @ColumnInfo(name = "is_med") var isMedication: Boolean,
+    @ColumnInfo(name = "comments") var comment: String,
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 ) : Parcelable {
 

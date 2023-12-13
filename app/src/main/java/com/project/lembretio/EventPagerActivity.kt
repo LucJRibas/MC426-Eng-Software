@@ -20,7 +20,7 @@ class EventPagerActivity : AppCompatActivity(), EventCreator{
     }
 
     override var event: Event = Event("", false, LocalDate.MAX,
-        LocalTime.MAX, mutableListOf(), 0, null, false, -1)
+        LocalTime.MAX, mutableListOf(), 0, null, false, "", -1)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -92,6 +92,7 @@ class EventAlarm : Fragment() {
                 if (builder.event.alarmId == 0) Math.toIntExact(LocalDateTime.now().getLong(ChronoField.EPOCH_DAY)) else builder.event.alarmId,
                 uri,
                 builder.event.isMedication,
+                builder.event.comment,
                 if (builder.event.id == -1) 0 else builder.event.id
             )
             scheduleAlarmForEvent(newEvent)

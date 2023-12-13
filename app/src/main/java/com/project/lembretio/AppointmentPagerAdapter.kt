@@ -4,6 +4,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.fragment.app.Fragment;
 import com.project.lembretio.addeventfragments.EventAlarm
+import com.project.lembretio.addeventfragments.EventComment
 import com.project.lembretio.addeventfragments.EventDate
 import com.project.lembretio.addeventfragments.EventFrequency
 import com.project.lembretio.addeventfragments.EventMany
@@ -15,11 +16,12 @@ class AppointmentPagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
         return when (position) {
             1 -> EventDate()
             2 -> EventSingleTime()
-            3 -> EventAlarm()
+            3 -> EventComment()
+            4 -> EventAlarm()
             else -> EventTitle()
         }
     }
     override fun getItemCount(): Int {
-        return 4
+        return 5
     }
 }
