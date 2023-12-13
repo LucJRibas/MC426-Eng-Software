@@ -20,11 +20,10 @@
         <receiver android:name=".AlarmReceiver"
             android:enabled="true"/>
         <activity
-            android:name=".EventActivity"
-            android:exported="false" >
-        </activity>
-        <activity
             android:name=".EventPagerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TimelineActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

@@ -29,4 +29,11 @@ class Converters {
     @TypeConverter
     fun toUri(value: String?): Uri? = value?.let { Uri.parse(it)}
 
+    @TypeConverter
+    fun toTime(value: String?): LocalTime? = value?.let { LocalTime.parse(it)}
+
+    @TypeConverter
+    fun fromTime(time: LocalTime?): String? = time?.toString()
+
+
 }

@@ -75,8 +75,7 @@ class EventTitle : Fragment() {
             }
         }
         prevButton.setOnClickListener {
-            val intentBack = Intent(context, MainActivity::class.java)
-            startActivity(intentBack)
+            activity?.finish()
         }
         return layout
     }

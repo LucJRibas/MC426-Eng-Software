@@ -16,7 +16,7 @@
 
         <LinearLayout
             android:id="@+id/llEventInfo"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_weight="82"
             android:layout_height="match_parent"
             android:background="#6750A3"
@@ -50,17 +50,6 @@
 
 
         </LinearLayout>
-
-        <Button
-            android:id="@+id/btnRemove"
-            android:layout_width="0dp"
-            android:layout_weight="18"
-            android:layout_height="match_parent"
-            android:background="@color/purple_700"
-            android:drawableEnd="@drawable/trash_icon"
-            android:gravity="center|center_vertical"
-            android:textSize="20sp"
-            android:textStyle="bold" />
 
     </LinearLayout>
 
