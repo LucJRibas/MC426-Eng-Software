@@ -84,7 +84,7 @@ class EventDate : Fragment() {
         nextButton.setOnClickListener {
             if (date != null) {
                 eventCreator.event.date = date!!
-                if (!eventCreator.event.repeating) {
+                if (eventCreator.event.isMedication && !eventCreator.event.repeating) {
                     if (eventCreator.event.times.any { LocalDateTime.of(eventCreator.event.date, it).isBefore(LocalDateTime.now()) }) {
                         Toast.makeText(context, "O rémedio só pode ser tomado em uma data/horário futuros", Toast.LENGTH_SHORT).show()
                         return@setOnClickListener
