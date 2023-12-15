@@ -17,6 +17,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.project.lembretio.EventCreator
 import com.project.lembretio.MainActivity
 import com.project.lembretio.R
+import com.project.lembretio.utils.isEventTimeValid
 import org.w3c.dom.Text
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -84,13 +85,9 @@ class EventDate : Fragment() {
         nextButton.setOnClickListener {
             if (date != null) {
                 eventCreator.event.date = date!!
-                if (eventCreator.event.isMedication && !eventCreator.event.repeating) {
-                    if (eventCreator.event.times.any { LocalDateTime.of(eventCreator.event.date, it).isBefore(LocalDateTime.now()) }) {
-                        Toast.makeText(context, "O rémedio só pode ser tomado em uma data/horário futuros", Toast.LENGTH_SHORT).show()
-                        return@setOnClickListener
-                    }
-
-
+                if (!isEventTimeValid(eventCreator.event)) {
+                    Toast.makeText(context, "O rémedio só pode ser tomado em uma data/horário futuros", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
                 }
                 viewPager?.currentItem = viewPager?.currentItem?.plus(1)!!
             } else  {
