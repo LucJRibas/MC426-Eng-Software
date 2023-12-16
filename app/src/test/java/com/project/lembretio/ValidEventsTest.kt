@@ -53,4 +53,23 @@ class ValidEventsTest {
         assert(!isEventTimeValid(event))
     }
 
+    @Test
+    fun `valid event that is medication but repeats`() {
+        event.isMedication = true
+        event.repeating = true
+        event.date = LocalDate.now().plusDays(1)
+        val now = LocalTime.now()
+        event.times = mutableListOf(now.plusMinutes(3), now.plusMinutes(10))
+        assert(!isEventTimeValid(event))
+    }
+
+    @Test
+    fun `valid event that is not a medication`() {
+        event.isMedication = false
+        event.repeating = false
+        event.date = LocalDate.now().plusDays(1)
+        val now = LocalTime.now()
+        event.times = mutableListOf(now.plusMinutes(1))
+        assert(!isEventTimeValid(event))
+    }
 }
