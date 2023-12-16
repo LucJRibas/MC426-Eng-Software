@@ -60,7 +60,7 @@ class ValidEventsTest {
         event.date = LocalDate.now().plusDays(1)
         val now = LocalTime.now()
         event.times = mutableListOf(now.plusMinutes(3), now.plusMinutes(10))
-        assert(!isEventTimeValid(event))
+        assert(isEventTimeValid(event))
     }
 
     @Test
@@ -70,6 +70,6 @@ class ValidEventsTest {
         event.date = LocalDate.now().plusDays(1)
         val now = LocalTime.now()
         event.times = mutableListOf(now.plusMinutes(1))
-        assert(!isEventTimeValid(event))
+        assert(isEventTimeValid(event))
     }
 }
