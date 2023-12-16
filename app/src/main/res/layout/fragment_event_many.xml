@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentBottom="false"
+    android:orientation="vertical"
+    tools:context=".addeventfragments.EventMany">
+
+    <Button
+        android:id="@+id/btn_many_prev"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_margin="5dp"
+        android:enabled="true"
+        android:text="Voltar"
+        android:textSize="30dp"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_many_next"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btn_many_next"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_margin="5dp"
+        android:text="Próximo"
+        android:textSize="30dp"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btn_many_prev" />
+
+    <TextView
+        android:id="@+id/event_many_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:text="Quantas vezes aos dia você precisa toma-lo?"
+        android:textSize="40dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/spinner_many"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <Spinner
+        android:id="@+id/spinner_many"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toTopOf="@id/recycler_many"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/event_many_text" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_many"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_many_prev"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_many" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

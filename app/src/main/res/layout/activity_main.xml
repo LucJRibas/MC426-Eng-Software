@@ -1,33 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+    android:background="@color/lightblue"
     tools:context=".MainActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="Lembretio"
+        app:titleTextColor="@color/white" />
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize" />
 
-    </com.google.android.material.appbar.AppBarLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvEventActivity"
+        android:layout_width="match_parent"
+        android:layout_height="664dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-    <include layout="@layout/content_main" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/fabConstraint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginBottom="16dp"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        android:minHeight="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnCreateEvent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="50dp"
+        android:contentDescription="TODO"
+        android:src="@drawable/plus_icon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:shapeAppearanceOverlay="@style/Widget.Material3.FloatingActionButton.Primary" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnCreateAppoint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="20dp"
+        android:contentDescription="TODO"
+        android:visibility="invisible"
+        android:src="@drawable/plus_icon"
+        app:layout_constraintBottom_toTopOf="@+id/btnCreateEvent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnCreateMedicine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="20dp"
+            android:contentDescription="TODO"
+            android:src="@drawable/plus_icon"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@id/btnCreateAppoint"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/appointText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/fab_text_bg"
+        android:elevation="8dp"
+        android:paddingHorizontal="10dp"
+        android:visibility="invisible"
+        android:paddingVertical="4dp"
+        android:text="Consulta"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/btnCreateAppoint"
+        app:layout_constraintEnd_toStartOf="@id/btnCreateAppoint"
+        app:layout_constraintTop_toTopOf="@id/btnCreateAppoint" />
+
+    <TextView
+        android:id="@+id/medicineText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/fab_text_bg"
+        android:elevation="8dp"
+        android:visibility="invisible"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="4dp"
+        android:text="Remédio"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/btnCreateMedicine"
+        app:layout_constraintEnd_toStartOf="@id/btnCreateMedicine"
+        app:layout_constraintTop_toTopOf="@id/btnCreateMedicine" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
