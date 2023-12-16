@@ -16,6 +16,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.project.lembretio.EventCreator
 import com.project.lembretio.MainActivity
 import com.project.lembretio.R
+import com.project.lembretio.utils.isEventNameValid
 
 
 class EventTitle : Fragment() {
@@ -47,7 +48,8 @@ class EventTitle : Fragment() {
 
         val viewPager: ViewPager2? = activity?.findViewById(R.id.view_pager)
         nextButton.setOnClickListener {
-            if (editText.text.toString() == "") {
+            eventCreator.event.name = editText.text.toString()
+            if (!isEventNameValid(eventCreator.event)) {
                 if (eventCreator.event.isMedication) {
                     Toast.makeText(
                         context,
@@ -62,7 +64,7 @@ class EventTitle : Fragment() {
                     ).show()
                 }
             } else {
-                eventCreator.event.name = editText.text.toString()
+
 
                 val imm = activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
                 var view = activity?.currentFocus

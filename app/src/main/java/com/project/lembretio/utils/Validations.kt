@@ -18,3 +18,7 @@ fun isEventTimeValid(event: Event): Boolean {
     }
     return true
 }
+
+fun isEventNameValid(event: Event): Boolean {
+    return !(event.name == null || event.name == "")
+}
